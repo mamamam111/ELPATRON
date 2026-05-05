@@ -13,6 +13,14 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+# Force sidebar always visible
+st.markdown("""
+<style>
+    [data-testid="collapsedControl"] { display: none !important; }
+    section[data-testid="stSidebar"] { display: flex !important; visibility: visible !important; }
+</style>
+""", unsafe_allow_html=True)
+
 # ─── CSS ──────────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
