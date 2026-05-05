@@ -320,39 +320,81 @@ risks = [
 df_risk = pd.DataFrame(risks)
 df_risk["Score"] = df_risk["L"] * df_risk["S"]
 
-# ─── Sidebar ───────────────────────────────────────────────────────────────────
-with st.sidebar:
-    st.markdown("""
-    <div class="sb-brand">
-        <p class="sb-name">⚡ ECOS</p>
-        <p class="sb-sub">EcoBat Indonesia · IEEEBIG 2026</p>
-    </div>""", unsafe_allow_html=True)
 
-    page = st.radio("", [
-        "🏠  Executive Overview",
-        "🟢  Pillar 1 — BaaS & Deposit",
-        "🔵  Pillar 2 — SPKLU Network",
-        "🔴  Pillar 3 — Battery Grading",
-        "💰  Financial Summary",
-        "⚠️   Risk Assessment",
-        "🎛️   Scenario Simulator",
-    ], label_visibility="collapsed")
+# ─── Hide sidebar + inject top nav CSS ─────────────────────────────────────────
+st.markdown("""
+<style>
+section[data-testid="stSidebar"]  { display: none !important; }
+[data-testid="collapsedControl"]   { display: none !important; }
+.main .block-container {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+    padding-top: 0.5rem !important;
+}
+div[data-testid="stHorizontalBlock"] button[kind="primary"] {
+    background: rgba(0,229,160,0.12) !important;
+    border: 1px solid rgba(0,229,160,0.4) !important;
+    color: #00E5A0 !important;
+}
+div[data-testid="stHorizontalBlock"] button[kind="secondary"] {
+    background: rgba(255,255,255,0.03) !important;
+    border: 1px solid #1A2840 !important;
+    color: #8CA0BB !important;
+}
+div[data-testid="stHorizontalBlock"] button {
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.78rem !important;
+    border-radius: 6px !important;
+    padding: 6px 4px !important;
+}
+</style>
+""", unsafe_allow_html=True)
 
-    st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
-    st.markdown("""
-    <div style="padding:10px 16px;">
-        <p style="font-family:'Space Mono',monospace;font-size:0.6rem;color:#4A6080;
-                  text-transform:uppercase;letter-spacing:0.12em;margin:0 0 4px">Team</p>
-        <p style="color:#8CA0BB;font-size:0.8rem;margin:0 0 8px">Elpatron</p>
-        <p style="font-family:'Space Mono',monospace;font-size:0.58rem;color:#4A6080;margin:0">
-            Source: PLN (2024) · Casebook Data (2026)</p>
-    </div>""", unsafe_allow_html=True)
+# Brand bar
+st.markdown("""
+<div style="background:#080D18;border-bottom:1px solid #1A2840;
+            padding:12px 20px;margin:-0.5rem -1.5rem 1rem -1.5rem;
+            display:flex;align-items:center;">
+    <span style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;
+                color:#00E5A0;letter-spacing:0.08em;margin-right:20px;">⚡ ECOS</span>
+    <span style="font-family:'Space Mono',monospace;font-size:0.58rem;
+                color:#4A6080;margin-right:auto;">EcoBat Indonesia · IEEEBIG 2026 · Team Elpatron</span>
+    <span style="font-family:'Space Mono',monospace;font-size:0.58rem;color:#4A6080;">
+        Source: PLN (2024) · Casebook Data (2026)</span>
+</div>
+""", unsafe_allow_html=True)
+
+# Session state
+PAGES = [
+    ("🏠 Overview",  "Overview"),
+    ("🟢 Pillar 1",  "Pillar 1"),
+    ("🔵 Pillar 2",  "Pillar 2"),
+    ("🔴 Pillar 3",  "Pillar 3"),
+    ("💰 Financial", "Financial"),
+    ("⚠️ Risk",       "Risk"),
+    ("🎛️ Simulator", "Simulator"),
+]
+
+if "page_idx" not in st.session_state:
+    st.session_state.page_idx = 0
+
+nav_cols = st.columns(len(PAGES))
+for i, (col, (label, _)) in enumerate(zip(nav_cols, PAGES)):
+    with col:
+        if st.button(label, key=f"nav_{i}", use_container_width=True,
+                     type="primary" if st.session_state.page_idx == i else "secondary"):
+            st.session_state.page_idx = i
+            st.rerun()
+
+st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
+page = PAGES[st.session_state.page_idx][1]
+
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # PAGE 1 — EXECUTIVE OVERVIEW
 # ═══════════════════════════════════════════════════════════════════════════════
-if "Overview" in page:
+if page == "Overview":
     st.markdown("""
     <div class="page-header">
         <div class="page-tag">Executive Overview · Team Elpatron · IEEEBIG 2026</div>
@@ -492,7 +534,7 @@ if "Overview" in page:
 # ═══════════════════════════════════════════════════════════════════════════════
 # PAGE 2 — PILLAR 1
 # ═══════════════════════════════════════════════════════════════════════════════
-elif "Pillar 1" in page:
+elif page == "Pillar 1":
     st.markdown("""
     <div class="page-header">
         <div class="page-tag">Pillar 1 · Ownership Restructuring</div>
@@ -628,7 +670,7 @@ elif "Pillar 1" in page:
 # ═══════════════════════════════════════════════════════════════════════════════
 # PAGE 3 — PILLAR 2
 # ═══════════════════════════════════════════════════════════════════════════════
-elif "Pillar 2" in page:
+elif page == "Pillar 2":
     st.markdown("""
     <div class="page-header">
         <div class="page-tag">Pillar 2 · Decentralized Collection Network</div>
@@ -824,7 +866,7 @@ elif "Pillar 2" in page:
 # ═══════════════════════════════════════════════════════════════════════════════
 # PAGE 4 — PILLAR 3
 # ═══════════════════════════════════════════════════════════════════════════════
-elif "Pillar 3" in page:
+elif page == "Pillar 3":
     st.markdown("""
     <div class="page-header">
         <div class="page-tag">Pillar 3 · Battery Monetisation</div>
@@ -995,7 +1037,7 @@ elif "Pillar 3" in page:
 # ═══════════════════════════════════════════════════════════════════════════════
 # PAGE 5 — FINANCIAL SUMMARY
 # ═══════════════════════════════════════════════════════════════════════════════
-elif "Financial" in page:
+elif page == "Financial":
     st.markdown("""
     <div class="page-header">
         <div class="page-tag">Financial Summary · 5-Year Integrated Projection</div>
@@ -1109,7 +1151,7 @@ elif "Financial" in page:
 # ═══════════════════════════════════════════════════════════════════════════════
 # PAGE 6 — RISK ASSESSMENT
 # ═══════════════════════════════════════════════════════════════════════════════
-elif "Risk" in page:
+elif page == "Risk":
     st.markdown("""
     <div class="page-header">
         <div class="page-tag">Risk Assessment · Likelihood × Severity Matrix</div>
@@ -1198,7 +1240,7 @@ elif "Risk" in page:
 # ═══════════════════════════════════════════════════════════════════════════════
 # PAGE 7 — SCENARIO SIMULATOR
 # ═══════════════════════════════════════════════════════════════════════════════
-elif "Simulator" in page:
+elif page == "Simulator":
     st.markdown("""
     <div class="page-header">
         <div class="page-tag">Interactive · Scenario Planning Tool</div>
