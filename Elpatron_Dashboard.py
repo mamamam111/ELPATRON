@@ -245,10 +245,11 @@ def layout(title="", h=380):
         font=dict(color=FONT, family="Roboto, sans-serif"),
         title=dict(text=title, font=dict(size=16, color=FONT, family="Google Sans"), x=0),
         height=h,
-        margin=dict(l=12, r=12, t=45 if title else 18, b=12),
+        # Mengubah margin kiri (l) dan bawah (b) agar teks tidak terpotong
+        margin=dict(l=50, r=16, t=45 if title else 18, b=50), 
         legend=dict(bgcolor="rgba(255,255,255,0.8)", bordercolor=GRID, borderwidth=1, font=dict(color=FONT)),
-        xaxis=dict(gridcolor=GRID, zerolinecolor=GRID, tickfont=dict(size=11, color="#5F6368")),
-        yaxis=dict(gridcolor=GRID, zerolinecolor=GRID, tickfont=dict(size=11, color="#5F6368")),
+        xaxis=dict(gridcolor=GRID, zerolinecolor=GRID, tickfont=dict(size=11, color="#5F6368"), automargin=True),
+        yaxis=dict(gridcolor=GRID, zerolinecolor=GRID, tickfont=dict(size=11, color="#5F6368"), automargin=True),
         hoverlabel=dict(bgcolor="#FFFFFF", font_size=13, font_family="Roboto", font_color="#202124", bordercolor="#DADCE0"),
     )
 
@@ -400,7 +401,7 @@ st.markdown("""
             padding:16px 32px;margin:-1rem -2rem 1.5rem -2rem;
             display:flex;align-items:center;box-shadow: 0 1px 3px 0 rgba(60,64,67,0.08);">
     <span style="font-family:'Google Sans',sans-serif;font-size:1.5rem;font-weight:700;
-                color:#1A73E8;margin-right:32px;letter-spacing:0.05em;">ECOS</span>
+                color:#1A73E8;margin-right:32px;letter-spacing:0.05em;">ECOS DASHBOARD</span>
     <span style="font-family:'Roboto',sans-serif;font-size:0.9rem;font-weight:500;
                 color:#5F6368;margin-right:auto;">Team Elpatron</span>
 </div>
@@ -467,7 +468,7 @@ if page == "Overview":
         fig_b.update_traces(texttemplate="%{text}%", textposition="outside", marker_line_width=0, textfont=dict(color=FONT))
         fig_b.update_layout(**layout("Consumer Survey Results (n=1,250 | Q4 2025)", 340))
         fig_b.update_layout(xaxis=dict(range=[0, 88], gridcolor=GRID), showlegend=True,
-                            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color=FONT)))
+                            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
         st.plotly_chart(fig_b, use_container_width=True, theme=None)
 
         insight([
@@ -1176,7 +1177,7 @@ elif page == "Financial":
                              text=eol_sales, textposition="outside", textfont=dict(size=10, color=FONT)))
     fig_e2.add_trace(go.Bar(x=eol_yrs, y=eol_cap, name="Captured by ECOS",
                              marker_color=G, marker_line_width=0,
-                             text=eol_cap, textposition="inside", textfont=dict(size=10, color="#FFFFFF")))
+                             text=eol_cap, textposition="inside", textfont=dict(size=10, color=FONT)))
     fig_e2.update_layout(**layout("", 360))
     fig_e2.update_layout(barmode="overlay", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color=FONT)))
     st.plotly_chart(fig_e2, use_container_width=True, theme=None)
