@@ -28,6 +28,7 @@ st.markdown("""
 :root {
     --bg-primary:   #F8F9FA;
     --bg-card:      #FFFFFF;
+    --bg-card-h:    #F1F3F4;
     --border:       #DADCE0;
     --border-acc:   #E8EAED;
     --green:        #1E8E3E; 
@@ -55,11 +56,18 @@ section[data-testid="stSidebar"] {
 
 .main .block-container { padding: 2rem 2.5rem 3rem 2.5rem; max-width: 1400px; }
 
-/* Force Streamlit Native Components to be readable in Light Mode */
+/* Override Streamlit UI components */
 .stMarkdown p, .stMarkdown span { color: var(--txt2); }
 .stSlider div[data-testid="stThumbValue"], .stSelectbox span, .stNumberInput input { color: var(--txt) !important; font-weight: 500;}
 [data-testid="stTickBarMin"], [data-testid="stTickBarMax"] { color: var(--txt3) !important; }
-.stDataFrame, .stDataFrame div { color: var(--txt) !important; }
+
+/* Custom HTML Tables (replaces st.dataframe to force light mode) */
+.custom-table { width: 100%; border-collapse: collapse; font-family: 'Roboto', sans-serif; font-size: 0.85rem; color: var(--txt); background: var(--bg-card); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-sm); }
+.custom-table thead { background-color: var(--bg-card-h); }
+.custom-table th { padding: 12px 16px; text-align: left; font-weight: 500; color: var(--txt2); border-bottom: 2px solid var(--border); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.03em; }
+.custom-table td { padding: 12px 16px; border-bottom: 1px solid var(--border-acc); color: var(--txt); }
+.custom-table tbody tr:hover td { background-color: #F8F9FA; }
+.custom-table tbody tr:last-child td { border-bottom: none; }
 
 /* Page Header */
 .page-header { margin-bottom: 2rem; }
@@ -238,7 +246,7 @@ def layout(title="", h=380):
         title=dict(text=title, font=dict(size=16, color=FONT, family="Google Sans"), x=0),
         height=h,
         margin=dict(l=12, r=12, t=45 if title else 18, b=12),
-        legend=dict(bgcolor="rgba(255,255,255,0.8)", bordercolor=GRID, borderwidth=1),
+        legend=dict(bgcolor="rgba(255,255,255,0.8)", bordercolor=GRID, borderwidth=1, font=dict(color=FONT)),
         xaxis=dict(gridcolor=GRID, zerolinecolor=GRID, tickfont=dict(size=11, color="#5F6368")),
         yaxis=dict(gridcolor=GRID, zerolinecolor=GRID, tickfont=dict(size=11, color="#5F6368")),
         hoverlabel=dict(bgcolor="#FFFFFF", font_size=13, font_family="Roboto", font_color="#202124", bordercolor="#DADCE0"),
@@ -276,6 +284,10 @@ def stat(label, val, cls=""):
         <span class="stat-label">{label}</span>
         <span class="stat-value {cls}">{val}</span>
     </div>""", unsafe_allow_html=True)
+
+def render_table(df):
+    html = df.to_html(index=False, classes="custom-table")
+    st.markdown(html, unsafe_allow_html=True)
 
 # === Data ======================================================================
 years       = [2022, 2023, 2024, 2025]
@@ -388,7 +400,9 @@ st.markdown("""
             padding:16px 32px;margin:-1rem -2rem 1.5rem -2rem;
             display:flex;align-items:center;box-shadow: 0 1px 3px 0 rgba(60,64,67,0.08);">
     <span style="font-family:'Google Sans',sans-serif;font-size:1.5rem;font-weight:700;
-                color:#1A73E8;letter-spacing:0.05em;">ECOS DASHBOARD</span>
+                color:#1A73E8;margin-right:32px;letter-spacing:0.05em;">ECOS</span>
+    <span style="font-family:'Roboto',sans-serif;font-size:0.9rem;font-weight:500;
+                color:#5F6368;margin-right:auto;">Team Elpatron</span>
 </div>
 """, unsafe_allow_html=True)
 
@@ -453,12 +467,12 @@ if page == "Overview":
         fig_b.update_traces(texttemplate="%{text}%", textposition="outside", marker_line_width=0, textfont=dict(color=FONT))
         fig_b.update_layout(**layout("Consumer Survey Results (n=1,250 | Q4 2025)", 340))
         fig_b.update_layout(xaxis=dict(range=[0, 88], gridcolor=GRID), showlegend=True,
-                            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
-        st.plotly_chart(fig_b, use_container_width=True)
+                            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color=FONT)))
+        st.plotly_chart(fig_b, use_container_width=True, theme=None)
 
         insight([
             "Distance (41%) is the single largest structural barrier. ECOS Pillar 2 converts existing SPKLU stations into collection points, eliminating the need to build standalone infrastructure.",
-            "37% cite no financial incentive. Pillar 1 deposit scheme is calibrated above secondary market price (Rp 3-4.5M on OLX), flipping the economic calculus in the system's favour.",
+            "37% cite no financial incentive. Pillar 1 deposit scheme is calibrated above secondary market price (Rp 3-4.5M on secondary market), flipping the economic calculus in the system's favour.",
             "68% accept digital/app-based return systems, a strong signal that Pillar 2's QR/RFID traceability will face low adoption friction.",
         ])
 
@@ -533,8 +547,8 @@ if page == "Overview":
         fig_s.update_layout(**layout("Sales Volume & Profit Margin (2022-2025)", 340))
         fig_s.update_yaxes(title_text="Units", gridcolor=GRID, secondary_y=False)
         fig_s.update_yaxes(title_text="Margin (%)", secondary_y=True, range=[28, 44])
-        fig_s.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
-        st.plotly_chart(fig_s, use_container_width=True)
+        fig_s.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color=FONT)))
+        st.plotly_chart(fig_s, use_container_width=True, theme=None)
         insight([
             "Sales surged 812.7% from 10,327 (2022) to 94,250 units (2025) - yet the return infrastructure has not scaled proportionally.",
             "Profit margin improved consistently from 31.2% to 38.9%, confirming the pricing power and COGS efficiency.",
@@ -550,8 +564,8 @@ if page == "Overview":
                                   marker_color=O, marker_line_width=0,
                                   text=eol_cap, textposition="inside", textfont=dict(size=10, color=FONT)))
         fig_eol.update_layout(**layout("Projected EoL Volume vs ECOS Capture (2026-2032)", 340))
-        fig_eol.update_layout(barmode="overlay", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
-        st.plotly_chart(fig_eol, use_container_width=True)
+        fig_eol.update_layout(barmode="overlay", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color=FONT)))
+        st.plotly_chart(fig_eol, use_container_width=True, theme=None)
         insight([
             "Capture rate is low in early years (2026-2028) because the deposit scheme and SPKLU network are still being rolled out.",
             "By 2031-2032, ECOS capture accelerates sharply as the network matures and BaaS batteries begin reaching EoL.",
@@ -634,8 +648,8 @@ elif page == "Pillar 1":
         fig_c.update_layout(**layout("New vs. Cumulative BaaS Customers", 360))
         fig_c.update_yaxes(title_text="New Customers / Year", gridcolor=GRID, secondary_y=False)
         fig_c.update_yaxes(title_text="Cumulative Customers", secondary_y=True)
-        fig_c.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
-        st.plotly_chart(fig_c, use_container_width=True)
+        fig_c.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color=FONT)))
+        st.plotly_chart(fig_c, use_container_width=True, theme=None)
         insight([
             "New customer acquisition grows from 28,275 (2025) to 161,072 (2029) - a 5.7x increase, driven by expanding retail BaaS availability post-2026.",
             "Cumulative base reaches 443,012 by 2029, approaching the 70% final adoption target. Each customer locks in guaranteed EoL recovery.",
@@ -652,8 +666,8 @@ elif page == "Pillar 1":
                                text=[f"Rp{v:.0f}B" for v in nb_rev],
                                textposition="outside", textfont=dict(size=10, color=FONT)))
         fig_r.update_layout(**layout("Subscription vs. Non-Battery EV Revenue", 360))
-        fig_r.update_layout(barmode="group", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
-        st.plotly_chart(fig_r, use_container_width=True)
+        fig_r.update_layout(barmode="group", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color=FONT)))
+        st.plotly_chart(fig_r, use_container_width=True, theme=None)
         insight([
             "Subscription revenue scales from Rp 118.8B (2025) to Rp 1,860.6B (2029) - a 15.7x increase over 5 years.",
             "Non-battery EV revenue (vehicle chassis, accessories) is additive: BaaS customers still purchase the full EV, excluding the battery cost.",
@@ -772,7 +786,7 @@ elif page == "Pillar 2":
             legend=dict(bgcolor=BG, bordercolor=GRID, borderwidth=1,
                         font=dict(color=FONT, size=11), x=0.01, y=0.99)
         )
-        st.plotly_chart(fig_map, use_container_width=True)
+        st.plotly_chart(fig_map, use_container_width=True, theme=None)
         insight([
             "70% of Indonesia's 3,202 SPKLU units are concentrated in Java - mirroring EV adoption patterns and validating Phase 1 focus on Java.",
             "Circle size represents EV density: DKI Jakarta and West Java are the highest-priority targets for early SPKLU partnerships.",
@@ -783,7 +797,7 @@ elif page == "Pillar 2":
         sec("SPKLU DATA BY REGION")
         disp = df_f[["Region","SPKLU","SPBKLU","Phase","EV_Density"]].copy()
         disp.columns = ["Region","SPKLU","SPBKLU","Phase","EV Density"]
-        st.dataframe(disp, use_container_width=True, hide_index=True, height=220)
+        render_table(disp)
 
         st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
         sec("CONVERSION LOGIC")
@@ -822,8 +836,8 @@ elif page == "Pillar 2":
         fig_net.update_layout(**layout("Network Growth & Cumulative Collection", 360))
         fig_net.update_yaxes(title_text="Partner Stations", gridcolor=GRID, secondary_y=False)
         fig_net.update_yaxes(title_text="Cumulative Units", secondary_y=True)
-        fig_net.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
-        st.plotly_chart(fig_net, use_container_width=True)
+        fig_net.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color=FONT)))
+        st.plotly_chart(fig_net, use_container_width=True, theme=None)
         insight([
             "Station count grows 2.5x from 150 (2025) to 368 (2029), achieving >50% national SPKLU coverage.",
             "Collection volume accelerates in 2029 as BaaS legacy returns and deposit-scheme batteries begin flowing through the network.",
@@ -847,7 +861,7 @@ elif page == "Pillar 2":
         )
         fig_cc.update_layout(**layout("Cost per Unit Acquired - Channel Comparison", 360))
         fig_cc.update_layout(yaxis_range=[0, 680_000], showlegend=False)
-        st.plotly_chart(fig_cc, use_container_width=True)
+        st.plotly_chart(fig_cc, use_container_width=True, theme=None)
         insight([
             "Leveraging existing SPKLU infrastructure saves Rp 233,125 per unit - a 46.6% reduction versus building standalone facilities.",
             "Over 5 years and 109,037 units, this translates to Rp 25.4B in cumulative cost savings.",
@@ -860,7 +874,7 @@ elif page == "Pillar 2":
                          color_discrete_sequence=[B, G, Y, O], hole=0.5)
         fig_op.update_traces(textposition="outside", textfont_size=12, textfont_color=FONT)
         fig_op.update_layout(**layout("OPEX Composition - 5-Year (Rp 29.1B)", 360))
-        st.plotly_chart(fig_op, use_container_width=True)
+        st.plotly_chart(fig_op, use_container_width=True, theme=None)
         insight([
             "Operator compensation (56.2%) is the dominant cost - intentionally so, as it aligns SPKLU operators' incentives with the system's collection goals.",
             "Tech traceability (QR/RFID) is only 9.4% of OPEX, making the digital tracking layer highly cost-effective.",
@@ -882,8 +896,8 @@ elif page == "Pillar 2":
                                  line=dict(color="#202124", width=3, shape="spline", dash="dot"),
                                  marker=dict(size=8, color="#202124")))
     fig_oy.update_layout(**layout("", 340))
-    fig_oy.update_layout(barmode="stack", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
-    st.plotly_chart(fig_oy, use_container_width=True)
+    fig_oy.update_layout(barmode="stack", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color=FONT)))
+    st.plotly_chart(fig_oy, use_container_width=True, theme=None)
     insight([
         "Total OPEX remains stable at ~Rp 5.7-6.2B/year despite the station network more than doubling - demonstrating strong cost efficiency as the network scales.",
         "Station setup cost (one-time) drops from Rp 0.8B in 2025 to Rp 0.2-0.4B in subsequent years, confirming the front-loaded capex profile.",
@@ -949,7 +963,7 @@ elif page == "Pillar 3":
             "Price (IDR/kg)": ["1,200,000","2,800,000","650,000","N/A"],
             "Value (Rp M)": ["7.65-8.28","10.89-11.34","6.44-6.72","24.97-26.34"],
         })
-        st.dataframe(mat_df, use_container_width=True, hide_index=True)
+        render_table(mat_df)
 
         fig_mb = go.Figure()
         fig_mb.add_trace(go.Bar(
@@ -961,7 +975,7 @@ elif page == "Pillar 3":
         ))
         fig_mb.update_layout(**layout("Material Value Contribution per Battery (Rp Juta)", 270))
         fig_mb.update_layout(showlegend=False)
-        st.plotly_chart(fig_mb, use_container_width=True)
+        st.plotly_chart(fig_mb, use_container_width=True, theme=None)
         insight([
             "Cobalt is the highest-value material at Rp 11.12M/battery despite having the lowest mass (4.2 kg) - reflecting its premium market price of Rp 2.8M/kg.",
             "Total recoverable value per battery (Rp 24.97-26.34M) is over 90x the Pillar 2 acquisition cost of Rp 266,875 - making the collection investment extraordinarily efficient.",
@@ -984,7 +998,7 @@ elif page == "Pillar 3":
             totals=dict(marker=dict(color=O)),
         ))
         fig_wf.update_layout(**layout("Pillar 3 Cost vs Revenue Waterfall (Rp Billion)", 450))
-        st.plotly_chart(fig_wf, use_container_width=True)
+        st.plotly_chart(fig_wf, use_container_width=True, theme=None)
         insight([
             "Material recovery (Rp 1,965.0B net) dwarfs ESS revenue (Rp 197.0B net) by 10x, confirming that raw material extraction - not refurbishment - is the primary value driver in Pillar 3.",
             "Total operating costs (Rp 260.1B) are only 12% of gross revenue (Rp 2,162.0B), yielding an 88.0% net margin.",
@@ -1008,8 +1022,8 @@ elif page == "Pillar 3":
                                   text=totals_gv, textposition="top center",
                                   textfont=dict(size=11, color=FONT)))
     fig_gv.update_layout(**layout("Battery Grading Volume by SoH Grade", 360))
-    fig_gv.update_layout(barmode="stack", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
-    st.plotly_chart(fig_gv, use_container_width=True)
+    fig_gv.update_layout(barmode="stack", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color=FONT)))
+    st.plotly_chart(fig_gv, use_container_width=True, theme=None)
     insight([
         "Total processed units grow from 5,257 (2030) to 35,926 (2033), reflecting BaaS batteries beginning to reach EoL at scale.",
         "Grade B (45%) is the largest segment - standard ESS provides a reliable secondary revenue stream alongside material recovery.",
@@ -1096,8 +1110,8 @@ elif page == "Financial":
                                      text=[f"Rp {v:,.1f}B" for v in vals],
                                      textposition="outside", textfont=dict(size=10, color=FONT)))
         fig_pp.update_layout(**layout("", 400))
-        fig_pp.update_layout(barmode="group", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
-        st.plotly_chart(fig_pp, use_container_width=True)
+        fig_pp.update_layout(barmode="group", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color=FONT)))
+        st.plotly_chart(fig_pp, use_container_width=True, theme=None)
         insight([
             "Pillar 1 dominates, contributing 75.7% (Rp 5,826.8B) of total net benefit - BaaS subscription is the primary recurring revenue engine.",
             "Pillar 2 is intentionally a cost centre: its Rp 29.1B OPEX is fully funded by Pillar 3 revenue, and it enables both Pillar 1 deposits and Pillar 3 material input.",
@@ -1115,7 +1129,7 @@ elif page == "Financial":
             text="<b>Rp 7.70 T</b>", x=0.5, y=0.5,
             font_size=16, font_color=FONT, showarrow=False, font_family="Google Sans"
         )])
-        st.plotly_chart(fig_pie, use_container_width=True)
+        st.plotly_chart(fig_pie, use_container_width=True, theme=None)
 
         st.markdown('<div class="info-card">', unsafe_allow_html=True)
         for l, v, c in [
@@ -1162,10 +1176,10 @@ elif page == "Financial":
                              text=eol_sales, textposition="outside", textfont=dict(size=10, color=FONT)))
     fig_e2.add_trace(go.Bar(x=eol_yrs, y=eol_cap, name="Captured by ECOS",
                              marker_color=G, marker_line_width=0,
-                             text=eol_cap, textposition="inside", textfont=dict(size=10, color=FONT)))
+                             text=eol_cap, textposition="inside", textfont=dict(size=10, color="#FFFFFF")))
     fig_e2.update_layout(**layout("", 360))
-    fig_e2.update_layout(barmode="overlay", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
-    st.plotly_chart(fig_e2, use_container_width=True)
+    fig_e2.update_layout(barmode="overlay", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color=FONT)))
+    st.plotly_chart(fig_e2, use_container_width=True, theme=None)
     insight([
         "ECOS capture accelerates sharply in 2031-2032 as the network matures and BaaS units begin reaching EoL - the system is designed to be ready before peak volumes arrive.",
         "The capture gap in 2026-2028 represents units that will enter informal channels. ECOS's phased rollout acknowledges this as an acceptable trade-off for infrastructure quality.",
@@ -1229,9 +1243,9 @@ elif page == "Risk":
         fig_sc.update_layout(
             xaxis=dict(title="Severity (1-5)", range=[0.3,5.7], gridcolor=GRID),
             yaxis=dict(title="Likelihood (1-5)", range=[0.3,5.7], gridcolor=GRID),
-            legend=dict(bgcolor=BG, title_text="Level", orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+            legend=dict(bgcolor=BG, title_text="Level", orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color=FONT)),
         )
-        st.plotly_chart(fig_sc, use_container_width=True)
+        st.plotly_chart(fig_sc, use_container_width=True, theme=None)
         insight([
             "R1 (EoL leakage, score 20) and R3 (regulatory non-compliance, score 15) sit in the Critical Zone - highest combined Likelihood x Severity.",
             "R10 (EV growth outpacing readiness, score 10) has the highest Likelihood (5) but lower Severity (2) because ECOS's BaaS mechanism structurally prevents future accumulation.",
@@ -1337,7 +1351,7 @@ elif page == "Simulator":
                                       textposition="outside", textfont=dict(size=10, color=FONT),
                                       showlegend=False))
         fig_sim.update_layout(**layout("Scenario Revenue Breakdown (Rp Billion)", 320))
-        st.plotly_chart(fig_sim, use_container_width=True)
+        st.plotly_chart(fig_sim, use_container_width=True, theme=None)
 
         c_g1, c_g2 = st.columns(2)
         with c_g1:
@@ -1346,8 +1360,8 @@ elif page == "Simulator":
                              color_discrete_sequence=[G, B, O], hole=0.5)
             fig_gp.update_traces(textfont_color=FONT)
             fig_gp.update_layout(**layout("Grade Distribution", 260))
-            fig_gp.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
-            st.plotly_chart(fig_gp, use_container_width=True)
+            fig_gp.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color=FONT)))
+            st.plotly_chart(fig_gp, use_container_width=True, theme=None)
 
         with c_g2:
             fig_vs = go.Figure()
@@ -1359,7 +1373,7 @@ elif page == "Simulator":
                                          showlegend=False, marker_line_width=0))
             fig_vs.update_layout(**layout("vs. Baseline", 260))
             fig_vs.update_layout(yaxis_range=[0, max(net_b, 7699.6)*1.28])
-            st.plotly_chart(fig_vs, use_container_width=True)
+            st.plotly_chart(fig_vs, use_container_width=True, theme=None)
 
         st.markdown(f"""
         <div style="background:{'#E6F4EA' if delta>=0 else '#FCE8E6'};
