@@ -1706,9 +1706,9 @@ elif page == "AI":
             st.session_state.chat_history.append({"role": "user", "content": user_input})
 
         # Call Claude API
-        api_key = st.secrets.get("ANTHROPIC_API_KEY", "")
+        api_key = st.secrets.get("GEMINI_API_KEY", "")
         if not api_key:
-            st.error("⚠️ ANTHROPIC_API_KEY not found in Streamlit Secrets. "
+            st.error("⚠️ GEMINI_API_KEY not found in Streamlit Secrets. "
                      "Go to Manage App → Secrets and add your key.")
         else:
             import requests, json
