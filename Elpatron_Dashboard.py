@@ -8,7 +8,6 @@ import numpy as np
 # === Page Config ===============================================================
 st.set_page_config(
     page_title="ECOS | EcoBat Indonesia",
-    page_icon="⚡",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -32,18 +31,18 @@ st.markdown("""
     --bg-card-h:    #F1F3F4;
     --border:       #DADCE0;
     --border-acc:   #E8EAED;
-    --green:        #34A853;
-    --blue:         #4285F4;
-    --orange:       #F9AB00;
-    --yellow:       #FBBC05;
-    --red:          #EA4335;
+    --green:        #1E8E3E; 
+    --blue:         #1A73E8; 
+    --orange:       #E65100; 
+    --yellow:       #F29900; 
+    --red:          #D93025; 
     --txt:          #202124;
     --txt2:         #5F6368;
     --txt3:         #80868B;
     --shadow:       0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
 }
 
-html, body, .stApp { background-color: var(--bg-primary) !important; font-family: 'Google Sans', 'Roboto', sans-serif; }
+html, body, .stApp { background-color: var(--bg-primary) !important; font-family: 'Google Sans', 'Roboto', sans-serif; color: var(--txt) !important; }
 #MainMenu, footer, header { visibility: hidden; }
 .stDeployButton { display: none; }
 
@@ -54,6 +53,12 @@ section[data-testid="stSidebar"] {
 }
 
 .main .block-container { padding: 2rem 2.5rem 3rem 2.5rem; max-width: 1400px; }
+
+/* Force Streamlit Native Components to be readable in Light Mode */
+.stMarkdown p, .stMarkdown span { color: var(--txt2); }
+.stSlider div[data-testid="stThumbValue"], .stSelectbox span, .stNumberInput input { color: var(--txt) !important; font-weight: 500;}
+[data-testid="stTickBarMin"], [data-testid="stTickBarMax"] { color: var(--txt3) !important; }
+.stDataFrame, .stDataFrame div { color: var(--txt) !important; }
 
 /* Page Header */
 .page-header { margin-bottom: 1.8rem; }
@@ -98,7 +103,7 @@ section[data-testid="stSidebar"] {
 .kpi-card.yellow::before { background: var(--yellow); }
 .kpi-card.red::before    { background: var(--red); }
 .kpi-label { font-size: 0.75rem; font-weight: 500; color: var(--txt2); text-transform: uppercase; margin-bottom: 7px; }
-.kpi-value { font-size: 1.75rem; font-weight: 400; color: var(--txt); line-height: 1; margin-bottom: 5px; }
+.kpi-value { font-size: 1.75rem; font-weight: 500; color: var(--txt); line-height: 1; margin-bottom: 5px; }
 .kpi-value.green  { color: var(--green); }
 .kpi-value.blue   { color: var(--blue); }
 .kpi-value.orange { color: var(--orange); }
@@ -151,7 +156,7 @@ section[data-testid="stSidebar"] {
 .card-tag.p1 { color: var(--green); }
 .card-tag.p2 { color: var(--blue); }
 .card-tag.p3 { color: var(--orange); }
-.info-card h3 { color: var(--txt) !important; font-size: 1.1rem !important; font-weight: 400 !important; margin: 0 0 10px 0 !important; }
+.info-card h3 { color: var(--txt) !important; font-size: 1.1rem !important; font-weight: 500 !important; margin: 0 0 10px 0 !important; }
 .info-card p, .info-card li { color: var(--txt2) !important; font-size: 0.9rem; line-height: 1.6; }
 
 /* Risk badge */
@@ -168,13 +173,13 @@ section[data-testid="stSidebar"] {
 
 /* Step card */
 .step-card { display: flex; gap: 14px; align-items: flex-start; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin: 7px 0; box-shadow: var(--shadow); }
-.step-num { font-family: 'Google Sans', 'Roboto', sans-serif; font-size: 1.5rem; font-weight: 400; line-height: 1; min-width: 36px; color: var(--blue); }
+.step-num { font-family: 'Google Sans', 'Roboto', sans-serif; font-size: 1.5rem; font-weight: 500; line-height: 1; min-width: 36px; color: var(--blue); }
 .step-content h4 { margin: 0 0 4px 0 !important; color: var(--txt) !important; font-size: 1rem !important; font-weight: 500 !important; }
 .step-content p  { margin: 0 !important; color: var(--txt2) !important; font-size: 0.85rem !important; line-height: 1.5; }
 
 /* Grade card */
 .grade-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; text-align: center; box-shadow: var(--shadow); }
-.grade-letter { font-family: 'Google Sans', 'Roboto', sans-serif; font-size: 4rem; font-weight: 400; line-height: 1; margin-bottom: 6px; }
+.grade-letter { font-family: 'Google Sans', 'Roboto', sans-serif; font-size: 4rem; font-weight: 500; line-height: 1; margin-bottom: 6px; }
 
 /* Divider */
 .divider { height: 1px; background: var(--border); margin: 2rem 0; }
@@ -198,7 +203,7 @@ h2, h3 { color: var(--txt) !important; }
 BG   = "#FFFFFF"
 FONT = "#202124"
 GRID = "#E8EAED"
-G = "#34A853"; B = "#4285F4"; O = "#FBBC05"; Y = "#F9AB00"; R = "#EA4335"
+G = "#1E8E3E"; B = "#1A73E8"; O = "#E65100"; Y = "#F29900"; R = "#D93025"
 
 def layout(title="", h=380):
     return dict(
@@ -210,6 +215,7 @@ def layout(title="", h=380):
         legend=dict(bgcolor=BG, bordercolor=GRID, borderwidth=1),
         xaxis=dict(gridcolor=GRID, zerolinecolor=GRID),
         yaxis=dict(gridcolor=GRID, zerolinecolor=GRID),
+        hoverlabel=dict(bgcolor="#FFFFFF", font_size=12, font_color="#202124", bordercolor="#DADCE0"),
     )
 
 # === Helpers ===================================================================
@@ -234,7 +240,7 @@ def insight(bullets: list, title="Key Insight"):
     items = "".join(f"<li>{b}</li>" for b in bullets)
     st.markdown(f"""
     <div class="insight-box">
-        <div class="ins-title">💡 {title}</div>
+        <div class="ins-title">{title}</div>
         <ul>{items}</ul>
     </div>""", unsafe_allow_html=True)
 
@@ -350,9 +356,11 @@ st.markdown("""
             padding:12px 24px;margin:-0.5rem -1.5rem 1rem -1.5rem;
             display:flex;align-items:center;box-shadow: 0 1px 2px 0 rgba(60,64,67,0.1);">
     <span style="font-family:'Google Sans',sans-serif;font-size:1.4rem;font-weight:500;
-                color:#202124;margin-right:24px;">⚡ ECOS</span>
+                color:#202124;margin-right:24px;">ECOS</span>
     <span style="font-family:'Roboto',sans-serif;font-size:0.85rem;
-                color:#5F6368;margin-right:auto;">Team Elpatron</span>
+                color:#5F6368;margin-right:auto;">EcoBat Indonesia | IEEEBIG 2026 | Team Elpatron</span>
+    <span style="font-family:'Roboto',sans-serif;font-size:0.8rem;color:#80868B;">
+        Source: PLN (2024) | Casebook Data (2026)</span>
 </div>
 """, unsafe_allow_html=True)
 
@@ -363,7 +371,7 @@ PAGES = [
     ("Pillar 2",   "Pillar 2"),
     ("Pillar 3",   "Pillar 3"),
     ("Financial",  "Financial"),
-    ("Risk",        "Risk"),
+    ("Risk",       "Risk"),
     ("Simulator",  "Simulator"),
 ]
 
@@ -414,7 +422,7 @@ if page == "Overview":
         cmap = {"Pillar 1": G, "Pillar 2": B, "Pillar 1+2": Y, "N/A": "#80868B"}
         fig_b = px.bar(df_b, x="Percent", y="Barrier", orientation="h",
                        color="Addressed by", color_discrete_map=cmap, text="Percent")
-        fig_b.update_traces(texttemplate="%{text}%", textposition="outside", marker_line_width=0)
+        fig_b.update_traces(texttemplate="%{text}%", textposition="outside", marker_line_width=0, textfont=dict(color=FONT))
         fig_b.update_layout(**layout("Consumer Survey Results - n=1,250 (Q4 2025)", 310))
         fig_b.update_layout(xaxis=dict(range=[0, 88], gridcolor=GRID), showlegend=True)
         st.plotly_chart(fig_b, use_container_width=True)
@@ -427,19 +435,19 @@ if page == "Overview":
 
     with col_r:
         sec("CRITICAL SITUATION")
-        for emoji, title, desc in [
-            ("🔴","88% of Batteries Leak to Informal Markets",
+        for step_num, title, desc in [
+            ("01","88% of Batteries Leak to Informal Markets",
              "Of 173,487 cumulative units sold (2022-2025), only ~12% return through official EcoBat channels."),
-            ("🟡","Material Value Lost: Rp 26.34M per Battery",
+            ("02","Material Value Lost: Rp 26.34M per Battery",
              "Batteries resold via OLX forfeit recoverable Lithium, Cobalt, and Nickel worth up to Rp 26.34M each."),
-            ("🟠","Hard Regulatory Deadline: 2030",
+            ("03","Hard Regulatory Deadline: 2030",
              "PerPres 55/2019, Permenperin 6/2022, and MoEF No. 9/2024 mandate operational recycling infrastructure."),
-            ("🔵","EoL Wave Is Already Visible",
+            ("04","EoL Wave Is Already Visible",
              "Earliest units sold in 2022 hit end-of-life by 2027. EoL volume reaches 76,500 units/year by 2032."),
         ]:
             st.markdown(f"""
             <div class="step-card">
-                <div style="font-size:1.4rem;line-height:1">{emoji}</div>
+                <div class="step-num">{step_num}</div>
                 <div class="step-content"><h4>{title}</h4><p>{desc}</p></div>
             </div>""", unsafe_allow_html=True)
 
@@ -487,7 +495,7 @@ if page == "Overview":
         fig_s = make_subplots(specs=[[{"secondary_y": True}]])
         fig_s.add_trace(go.Bar(x=years, y=sales_vol, name="Sales Volume (Units)",
                                marker_color=B, marker_line_width=0,
-                               text=sales_vol, textposition="outside", textfont=dict(size=10)),
+                               text=sales_vol, textposition="outside", textfont=dict(size=10, color=FONT)),
                          secondary_y=False)
         fig_s.add_trace(go.Scatter(x=years, y=margin_h, name="Profit Margin (%)",
                                     mode="lines+markers",
@@ -508,10 +516,10 @@ if page == "Overview":
         fig_eol.add_trace(go.Bar(x=eol_yrs, y=eol_sales, name="Projected EoL Volume",
                                   marker_color="#DADCE0", marker_line_color=B,
                                   marker_line_width=1.5,
-                                  text=eol_sales, textposition="outside", textfont=dict(size=9)))
+                                  text=eol_sales, textposition="outside", textfont=dict(size=9, color=FONT)))
         fig_eol.add_trace(go.Bar(x=eol_yrs, y=eol_cap, name="Units Captured by ECOS",
                                   marker_color=O, marker_line_width=0,
-                                  text=eol_cap, textposition="inside", textfont=dict(size=9)))
+                                  text=eol_cap, textposition="inside", textfont=dict(size=9, color="#FFFFFF")))
         fig_eol.update_layout(**layout("Projected EoL Volume vs ECOS Capture (2026-2032)", 320))
         fig_eol.update_layout(barmode="overlay")
         st.plotly_chart(fig_eol, use_container_width=True)
@@ -589,7 +597,7 @@ elif page == "Pillar 1":
         fig_c = make_subplots(specs=[[{"secondary_y": True}]])
         fig_c.add_trace(go.Bar(x=baas_yrs, y=new_cust, name="New BaaS Customers",
                                marker_color=G, marker_line_width=0,
-                               text=new_cust, textposition="outside", textfont=dict(size=10)),
+                               text=new_cust, textposition="outside", textfont=dict(size=10, color=FONT)),
                          secondary_y=False)
         fig_c.add_trace(go.Scatter(x=baas_yrs, y=cum_baas, name="Cumulative BaaS",
                                     mode="lines+markers",
@@ -609,11 +617,11 @@ elif page == "Pillar 1":
         fig_r.add_trace(go.Bar(x=baas_yrs, y=sub_rev, name="Subscription Revenue (Rp B)",
                                marker_color=G, marker_line_width=0,
                                text=[f"Rp{v:.0f}B" for v in sub_rev],
-                               textposition="outside", textfont=dict(size=9)))
+                               textposition="outside", textfont=dict(size=9, color=FONT)))
         fig_r.add_trace(go.Bar(x=baas_yrs, y=nb_rev, name="Non-Battery EV Revenue (Rp B)",
                                marker_color=B, marker_line_width=0,
                                text=[f"Rp{v:.0f}B" for v in nb_rev],
-                               textposition="outside", textfont=dict(size=9)))
+                               textposition="outside", textfont=dict(size=9, color=FONT)))
         fig_r.update_layout(**layout("Subscription vs. Non-Battery EV Revenue", 350))
         fig_r.update_layout(barmode="group")
         st.plotly_chart(fig_r, use_container_width=True)
@@ -699,7 +707,7 @@ elif page == "Pillar 2":
                     marker=dict(
                         size=s_density[row["EV_Density"]],
                         color=c_phase[ph], opacity=0.82,
-                        line=dict(width=2, color="white"), symbol="circle"
+                        line=dict(width=2, color="#FFFFFF"), symbol="circle"
                     ),
                     text=row["Region"],
                     textposition="top center",
@@ -750,19 +758,19 @@ elif page == "Pillar 2":
 
         st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
         sec("CONVERSION LOGIC")
-        for emoji, title, desc in [
-            ("🎯","Leveraging Existing Touchpoints",
+        for step_num, title, desc in [
+            ("01","Leveraging Existing Touchpoints",
              "EV drivers already visit SPKLU regularly. Adding battery collection requires no new real-estate or standalone infrastructure investment."),
-            ("💰","Operator Revenue Alignment",
+            ("02","Operator Revenue Alignment",
              "SPKLU operators receive volume-based compensation per battery collected - creating aligned incentives without capital expenditure on their side."),
-            ("📡","QR/RFID Traceability",
+            ("03","QR/RFID Traceability",
              "Every battery entering the system is logged with its condition and routed toward the Pillar 3 grading facility - building a long-term asset database."),
-            ("📊","68% Digital Acceptance",
+            ("04","68% Digital Acceptance",
              "Survey confirms 68% of consumers are willing to use a digital/app-based return system, validating the tech-enabled collection model."),
         ]:
             st.markdown(f"""
             <div style="display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--border)">
-                <span style="font-size:1.1rem">{emoji}</span>
+                <span style="font-family:'Google Sans', sans-serif; font-size:1.1rem; color:var(--blue); font-weight:500;">{step_num}</span>
                 <div>
                     <p style="color:var(--txt);font-weight:500;font-size:0.9rem;margin:0 0 2px">{title}</p>
                     <p style="color:var(--txt2);font-size:0.85rem;margin:0">{desc}</p>
@@ -776,7 +784,7 @@ elif page == "Pillar 2":
         fig_net = make_subplots(specs=[[{"secondary_y": True}]])
         fig_net.add_trace(go.Bar(x=sp_yrs, y=sp_stations, name="Partner Stations",
                                   marker_color=B, marker_line_width=0,
-                                  text=sp_stations, textposition="outside", textfont=dict(size=10)),
+                                  text=sp_stations, textposition="outside", textfont=dict(size=10, color=FONT)),
                            secondary_y=False)
         fig_net.add_trace(go.Scatter(x=sp_yrs, y=sp_cumul, name="Cumul. Units Collected",
                                       mode="lines+markers",
@@ -820,7 +828,7 @@ elif page == "Pillar 2":
         vals_op   = [56.2, 28.1, 9.4, 6.3]
         fig_op = px.pie(values=vals_op, names=labels_op,
                          color_discrete_sequence=[B, G, Y, O], hole=0.5)
-        fig_op.update_traces(textposition="outside", textfont_size=11)
+        fig_op.update_traces(textposition="outside", textfont_size=11, textfont_color=FONT)
         fig_op.update_layout(**layout("OPEX Composition - 5-Year (Rp 29.1B)", 340))
         st.plotly_chart(fig_op, use_container_width=True)
         insight([
@@ -841,8 +849,8 @@ elif page == "Pillar 2":
                                  marker_color=clr, marker_line_width=0))
     fig_oy.add_trace(go.Scatter(x=sp_yrs, y=sp_opex, name="Total OPEX",
                                  mode="lines+markers",
-                                 line=dict(color="#5F6368", width=2, dash="dot"),
-                                 marker=dict(size=8, color="#5F6368")))
+                                 line=dict(color="#202124", width=2, dash="dot"),
+                                 marker=dict(size=8, color="#202124")))
     fig_oy.update_layout(**layout("", 320))
     fig_oy.update_layout(barmode="stack")
     st.plotly_chart(fig_oy, use_container_width=True)
@@ -919,7 +927,7 @@ elif page == "Pillar 3":
             y=[7.97, 11.12, 6.58],
             marker_color=[G, O, B], marker_line_width=0,
             text=["Rp 7.97M","Rp 11.12M","Rp 6.58M"],
-            textposition="outside", textfont=dict(size=11)
+            textposition="outside", textfont=dict(size=11, color=FONT)
         ))
         fig_mb.update_layout(**layout("Material Value Contribution per Battery (Rp Juta)", 270))
         fig_mb.update_layout(showlegend=False)
@@ -939,7 +947,7 @@ elif page == "Pillar 3":
             y=[239.7,-42.7,197.0, 2159.4,-194.4,1965.0, -23.0,1901.9],
             text=["Rp 239.7B","Rp 42.7B","Rp 197.0B",
                   "Rp 2,159.4B","Rp 194.4B","Rp 1,965.0B","Rp 23.0B","Rp 1,901.9B"],
-            textposition="outside", textfont=dict(size=9.5),
+            textposition="outside", textfont=dict(size=9.5, color=FONT),
             connector=dict(line=dict(color=GRID, width=1.5)),
             increasing=dict(marker=dict(color=G)),
             decreasing=dict(marker=dict(color=R)),
@@ -966,9 +974,9 @@ elif page == "Pillar 3":
     totals_gv = [a+b+c for a,b,c in zip(ga_u,gb_u,gc_u)]
     fig_gv.add_trace(go.Scatter(x=p3_yrs, y=totals_gv, name="Total Units",
                                   mode="lines+markers+text",
-                                  line=dict(color="#5F6368",width=2),
+                                  line=dict(color="#202124",width=2),
                                   text=totals_gv, textposition="top center",
-                                  textfont=dict(size=11)))
+                                  textfont=dict(size=11, color=FONT)))
     fig_gv.update_layout(**layout("Battery Grading Volume by SoH Grade", 360))
     fig_gv.update_layout(barmode="stack")
     st.plotly_chart(fig_gv, use_container_width=True)
@@ -1056,7 +1064,7 @@ elif page == "Financial":
             fig_pp.add_trace(go.Bar(name=name, x=p_labels, y=vals,
                                      marker_color=clr, marker_line_width=0,
                                      text=[f"Rp {v:,.1f}B" for v in vals],
-                                     textposition="outside", textfont=dict(size=10)))
+                                     textposition="outside", textfont=dict(size=10, color=FONT)))
         fig_pp.update_layout(**layout("", 400))
         fig_pp.update_layout(barmode="group")
         st.plotly_chart(fig_pp, use_container_width=True)
@@ -1071,7 +1079,7 @@ elif page == "Financial":
         sec("NET BENEFIT SHARE")
         fig_pie = px.pie(values=[5826.8, 1901.9], names=["Pillar 1 (75.7%)", "Pillar 3 (24.7%)"],
                           color_discrete_sequence=[G, O], hole=0.55)
-        fig_pie.update_traces(textposition="outside", textfont_size=12)
+        fig_pie.update_traces(textposition="outside", textfont_size=12, textfont_color=FONT)
         fig_pie.update_layout(**layout("", 270))
         fig_pie.update_layout(annotations=[dict(
             text="<b>Rp 7.70 T</b>", x=0.5, y=0.5,
@@ -1121,10 +1129,10 @@ elif page == "Financial":
     fig_e2.add_trace(go.Bar(x=eol_yrs, y=eol_sales, name="Projected EoL Volume",
                              marker_color="#DADCE0", marker_line_color=B,
                              marker_line_width=1.5,
-                             text=eol_sales, textposition="outside", textfont=dict(size=9)))
+                             text=eol_sales, textposition="outside", textfont=dict(size=9, color=FONT)))
     fig_e2.add_trace(go.Bar(x=eol_yrs, y=eol_cap, name="Captured by ECOS",
                              marker_color=G, marker_line_width=0,
-                             text=eol_cap, textposition="inside", textfont=dict(size=9)))
+                             text=eol_cap, textposition="inside", textfont=dict(size=9, color="#FFFFFF")))
     fig_e2.update_layout(**layout("", 340))
     fig_e2.update_layout(barmode="overlay")
     st.plotly_chart(fig_e2, use_container_width=True)
@@ -1148,10 +1156,10 @@ elif page == "Risk":
 
     c1,c2,c3,c4 = st.columns(4)
     for col, lvl, clr, bg in [
-        (c1,"Extreme","#EA4335","#FCE8E6"),
-        (c2,"High",   "#F9AB00","#FEF7E0"),
-        (c3,"Medium", "#FBBC05","#FFF3E0"),
-        (c4,"Low",    "#34A853","#E6F4EA"),
+        (c1,"Extreme","#D93025","#FCE8E6"),
+        (c2,"High",   "#E65100","#FEF7E0"),
+        (c3,"Medium", "#F29900","#FFF3E0"),
+        (c4,"Low",    "#1E8E3E","#E6F4EA"),
     ]:
         n = len(df_risk[df_risk["level"] == lvl])
         with col:
@@ -1166,7 +1174,7 @@ elif page == "Risk":
     col_sc, col_dt = st.columns([1.1, 1])
     with col_sc:
         sec("RISK SCATTER MATRIX")
-        clrmap = {"Extreme":"#EA4335","High":"#F9AB00","Medium":"#FBBC05","Low":"#34A853"}
+        clrmap = {"Extreme":"#D93025","High":"#E65100","Medium":"#F29900","Low":"#1E8E3E"}
         fig_sc = px.scatter(
             df_risk, x="S", y="L", size="Score",
             color="level", text="id",
@@ -1207,7 +1215,7 @@ elif page == "Risk":
         f_pil = st.multiselect("Pillar", ["All","Pillar 1","Pillar 2","Pillar 3"],
                                 default=["All","Pillar 1","Pillar 2","Pillar 3"])
         df_filt = df_risk[df_risk["level"].isin(f_lvl) & df_risk["pillar"].isin(f_pil)]
-        sc_clr = {"Extreme":"#EA4335","High":"#F9AB00","Medium":"#FBBC05","Low":"#34A853"}
+        sc_clr = {"Extreme":"#D93025","High":"#E65100","Medium":"#F29900","Low":"#1E8E3E"}
         for _, r in df_filt.iterrows():
             clr = sc_clr[r["level"]]
             st.markdown(f"""
@@ -1219,7 +1227,7 @@ elif page == "Risk":
                     </span>
                 </div>
                 <div class="risk-name">{r['name']}</div>
-                <div class="risk-mit">🛡 {r['mitigation']}</div>
+                <div class="risk-mit">{r['mitigation']}</div>
             </div>""", unsafe_allow_html=True)
 
 # ===============================================================================
@@ -1239,7 +1247,7 @@ elif page == "Simulator":
         st.markdown('<div class="info-card">', unsafe_allow_html=True)
         baas_a  = st.slider("BaaS Adoption Rate (%)", 20, 95, 70,
                              help="% of new EV buyers choosing BaaS over outright purchase")
-        dep_r   = st.slider("🟡 Deposit Recovery Rate (%)", 40, 100, 90,
+        dep_r   = st.slider("Deposit Recovery Rate (%)", 40, 100, 90,
                              help="% of 173,487 legacy units successfully returned")
         sp_cov  = st.slider("SPKLU Network Coverage (%)", 15, 80, 50,
                              help="% of national SPKLU infrastructure partnered with EcoBat")
@@ -1296,7 +1304,7 @@ elif page == "Simulator":
             fig_sim.add_trace(go.Bar(x=[cat], y=[abs(val)], name=cat,
                                       marker_color=clr, marker_line_width=0,
                                       text=[f"Rp {abs(val):,.1f}B"],
-                                      textposition="outside", textfont=dict(size=10),
+                                      textposition="outside", textfont=dict(size=10, color=FONT),
                                       showlegend=False))
         fig_sim.update_layout(**layout("Scenario Revenue Breakdown (Rp Billion)", 310))
         st.plotly_chart(fig_sim, use_container_width=True)
@@ -1306,6 +1314,7 @@ elif page == "Simulator":
             fig_gp = px.pie(values=[ga, gb, gc],
                              names=[f"Grade A ({ga:,})", f"Grade B ({gb:,})", f"Grade C ({gc:,})"],
                              color_discrete_sequence=[G, B, O], hole=0.5)
+            fig_gp.update_traces(textfont_color="#FFFFFF")
             fig_gp.update_layout(**layout("Grade Distribution", 240))
             st.plotly_chart(fig_gp, use_container_width=True)
 
@@ -1315,7 +1324,7 @@ elif page == "Simulator":
                                      ("Baseline\n(70%/90%)", 7_699.6, B)]:
                 fig_vs.add_trace(go.Bar(x=[name], y=[val], marker_color=clr,
                                          text=[f"Rp {val:,.1f}B"],
-                                         textposition="outside", textfont=dict(size=11),
+                                         textposition="outside", textfont=dict(size=11, color=FONT),
                                          showlegend=False, marker_line_width=0))
             fig_vs.update_layout(**layout("vs. Baseline", 240))
             fig_vs.update_layout(yaxis_range=[0, max(net_b, 7699.6)*1.28])
