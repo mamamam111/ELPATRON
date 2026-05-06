@@ -8,6 +8,7 @@ import numpy as np
 # === Page Config ===============================================================
 st.set_page_config(
     page_title="ECOS | EcoBat Indonesia",
+    page_icon="ECOS",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -23,12 +24,11 @@ st.markdown("""
 # === CSS ======================================================================
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap');
 
 :root {
     --bg-primary:   #F8F9FA;
     --bg-card:      #FFFFFF;
-    --bg-card-h:    #F1F3F4;
     --border:       #DADCE0;
     --border-acc:   #E8EAED;
     --green:        #1E8E3E; 
@@ -39,10 +39,12 @@ st.markdown("""
     --txt:          #202124;
     --txt2:         #5F6368;
     --txt3:         #80868B;
-    --shadow:       0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+    --shadow-sm:    0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+    --shadow-md:    0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+    --shadow-hover: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
 }
 
-html, body, .stApp { background-color: var(--bg-primary) !important; font-family: 'Google Sans', 'Roboto', sans-serif; color: var(--txt) !important; }
+html, body, .stApp { background-color: var(--bg-primary) !important; font-family: 'Roboto', sans-serif; color: var(--txt) !important; }
 #MainMenu, footer, header { visibility: hidden; }
 .stDeployButton { display: none; }
 
@@ -61,161 +63,186 @@ section[data-testid="stSidebar"] {
 .stDataFrame, .stDataFrame div { color: var(--txt) !important; }
 
 /* Page Header */
-.page-header { margin-bottom: 1.8rem; }
+.page-header { margin-bottom: 2rem; }
 .page-tag {
     display: inline-block;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Google Sans', sans-serif;
     font-size: 0.75rem;
-    font-weight: 500;
+    font-weight: 700;
     color: var(--blue);
     background: #E8F0FE;
-    padding: 4px 12px;
-    border-radius: 16px;
+    padding: 6px 14px;
+    border-radius: 20px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 .page-header h1 {
-    font-family: 'Google Sans', 'Roboto', sans-serif !important;
-    font-size: 2.5rem !important;
-    font-weight: 400 !important;
+    font-family: 'Google Sans', sans-serif !important;
+    font-size: 2.8rem !important;
+    font-weight: 500 !important;
     color: var(--txt) !important;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
     margin: 0 !important;
-    line-height: 1.1;
+    line-height: 1.15;
 }
-.page-header p { color: var(--txt2) !important; font-size: 1rem; margin-top: 0.5rem; font-weight: 400; }
+.page-header p { color: var(--txt2) !important; font-size: 1.05rem; margin-top: 0.8rem; font-weight: 400; max-width: 800px; line-height: 1.5; }
+
+/* Global Card Hover Effect */
+.kpi-card, .info-card, .step-card, .grade-card, .risk-row {
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.kpi-card:hover, .info-card:hover, .step-card:hover, .grade-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover) !important;
+}
 
 /* KPI Cards */
 .kpi-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 18px 16px;
+    border-radius: 12px;
+    padding: 20px 18px;
     position: relative;
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-sm);
     overflow: hidden;
 }
-.kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
 .kpi-card.green::before  { background: var(--green); }
 .kpi-card.blue::before   { background: var(--blue); }
 .kpi-card.orange::before { background: var(--orange); }
 .kpi-card.yellow::before { background: var(--yellow); }
 .kpi-card.red::before    { background: var(--red); }
-.kpi-label { font-size: 0.75rem; font-weight: 500; color: var(--txt2); text-transform: uppercase; margin-bottom: 7px; }
-.kpi-value { font-size: 1.75rem; font-weight: 500; color: var(--txt); line-height: 1; margin-bottom: 5px; }
+.kpi-label { font-family: 'Google Sans', sans-serif; font-size: 0.75rem; font-weight: 500; color: var(--txt2); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.03em; }
+.kpi-value { font-family: 'Google Sans', sans-serif; font-size: 2rem; font-weight: 500; color: var(--txt); line-height: 1.1; margin-bottom: 6px; }
 .kpi-value.green  { color: var(--green); }
 .kpi-value.blue   { color: var(--blue); }
 .kpi-value.orange { color: var(--orange); }
 .kpi-value.yellow { color: var(--yellow); }
 .kpi-value.red    { color: var(--red); }
-.kpi-sub { font-size: 0.8rem; color: var(--txt3); }
+.kpi-sub { font-size: 0.85rem; color: var(--txt3); }
 
 /* Section title */
 .sec-title {
-    font-family: 'Roboto', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 500;
+    font-family: 'Google Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
     color: var(--txt2);
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 8px;
-    margin: 1.8rem 0 1rem 0;
+    border-bottom: 2px solid var(--border-acc);
+    padding-bottom: 10px;
+    margin: 2.5rem 0 1.2rem 0;
 }
 
 /* Insight box */
 .insight-box {
-    background: #E8F0FE;
-    border: none;
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--blue);
     border-radius: 8px;
-    padding: 16px;
-    margin-top: 10px;
+    padding: 18px 20px;
+    margin-top: 12px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 .insight-box .ins-title {
-    font-family: 'Google Sans', 'Roboto', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #1967D2;
-    margin-bottom: 8px;
+    font-family: 'Google Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--blue);
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
 }
-.insight-box p { color: #1967D2 !important; font-size: 0.85rem !important; margin: 0 !important; line-height: 1.6; }
-.insight-box ul { margin: 4px 0 0 0; padding-left: 20px; }
-.insight-box li { color: #1967D2 !important; font-size: 0.85rem !important; line-height: 1.6; }
+.insight-box p { color: var(--txt2) !important; font-size: 0.9rem !important; margin: 0 !important; line-height: 1.6; }
+.insight-box ul { margin: 6px 0 0 0; padding-left: 20px; }
+.insight-box li { color: var(--txt2) !important; font-size: 0.9rem !important; line-height: 1.6; margin-bottom: 4px; }
 
 /* Info card */
 .info-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 20px;
+    border-radius: 12px;
+    padding: 24px;
     height: 100%;
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-sm);
 }
-.card-tag { font-family: 'Roboto', sans-serif; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 7px; }
+.card-tag { font-family: 'Google Sans', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 10px; }
 .card-tag.p1 { color: var(--green); }
 .card-tag.p2 { color: var(--blue); }
 .card-tag.p3 { color: var(--orange); }
-.info-card h3 { color: var(--txt) !important; font-size: 1.1rem !important; font-weight: 500 !important; margin: 0 0 10px 0 !important; }
-.info-card p, .info-card li { color: var(--txt2) !important; font-size: 0.9rem; line-height: 1.6; }
+.info-card h3 { font-family: 'Google Sans', sans-serif !important; color: var(--txt) !important; font-size: 1.25rem !important; font-weight: 500 !important; margin: 0 0 12px 0 !important; }
+.info-card p, .info-card li { color: var(--txt2) !important; font-size: 0.95rem; line-height: 1.6; }
 
 /* Risk badge */
-.badge { display: inline-block; font-family: 'Roboto', sans-serif; font-size: 0.7rem; font-weight: 500; padding: 4px 10px; border-radius: 16px; text-transform: uppercase; }
+.badge { display: inline-block; font-family: 'Google Sans', sans-serif; font-size: 0.75rem; font-weight: 500; padding: 4px 12px; border-radius: 16px; text-transform: uppercase; letter-spacing: 0.03em; }
 .badge.extreme { background: #FCE8E6; color: #C5221F; }
 .badge.high    { background: #FEF7E0; color: #EA8600; }
 .badge.medium  { background: #FFF3E0; color: #E65100; }
 .badge.low     { background: #E6F4EA; color: #137333; }
 
 /* Risk row */
-.risk-row { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 13px 16px; margin: 7px 0; box-shadow: var(--shadow); }
-.risk-name { font-weight: 500; color: var(--txt); font-size: 0.9rem; margin: 5px 0 4px; }
-.risk-mit  { font-size: 0.85rem; color: var(--txt2); }
+.risk-row { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin: 8px 0; box-shadow: var(--shadow-sm); }
+.risk-name { font-family: 'Google Sans', sans-serif; font-weight: 500; color: var(--txt); font-size: 1rem; margin: 8px 0 4px; }
+.risk-mit  { font-size: 0.9rem; color: var(--txt2); line-height: 1.5; }
 
 /* Step card */
-.step-card { display: flex; gap: 14px; align-items: flex-start; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin: 7px 0; box-shadow: var(--shadow); }
-.step-num { font-family: 'Google Sans', 'Roboto', sans-serif; font-size: 1.5rem; font-weight: 500; line-height: 1; min-width: 36px; color: var(--blue); }
-.step-content h4 { margin: 0 0 4px 0 !important; color: var(--txt) !important; font-size: 1rem !important; font-weight: 500 !important; }
-.step-content p  { margin: 0 !important; color: var(--txt2) !important; font-size: 0.85rem !important; line-height: 1.5; }
+.step-card { display: flex; gap: 18px; align-items: flex-start; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin: 10px 0; box-shadow: var(--shadow-sm); }
+.step-num { 
+    font-family: 'Google Sans', sans-serif; 
+    font-size: 1.25rem; 
+    font-weight: 700; 
+    color: var(--blue); 
+    background: #E8F0FE; 
+    border-radius: 50%; 
+    min-width: 46px; 
+    height: 46px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+}
+.step-content h4 { font-family: 'Google Sans', sans-serif !important; margin: 0 0 6px 0 !important; color: var(--txt) !important; font-size: 1.1rem !important; font-weight: 500 !important; }
+.step-content p  { margin: 0 !important; color: var(--txt2) !important; font-size: 0.95rem !important; line-height: 1.6; }
 
 /* Grade card */
-.grade-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; text-align: center; box-shadow: var(--shadow); }
-.grade-letter { font-family: 'Google Sans', 'Roboto', sans-serif; font-size: 4rem; font-weight: 500; line-height: 1; margin-bottom: 6px; }
+.grade-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; text-align: center; box-shadow: var(--shadow-sm); }
+.grade-letter { font-family: 'Google Sans', sans-serif; font-size: 4.5rem; font-weight: 500; line-height: 1; margin-bottom: 10px; }
 
 /* Divider */
-.divider { height: 1px; background: var(--border); margin: 2rem 0; }
+.divider { height: 1px; background: var(--border-acc); margin: 2.5rem 0; }
 
 /* Custom alert */
-.c-alert { background: #E8F0FE; border-radius: 8px; padding: 12px 16px; color: #1967D2; font-size: 0.85rem; margin-top: 10px; border: 1px solid #D2E3FC; }
+.c-alert { background: #E8F0FE; border-radius: 8px; padding: 16px 20px; color: #1967D2; font-size: 0.9rem; margin-top: 16px; border: 1px solid #D2E3FC; }
 
 /* Stat row inside card */
-.stat-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-acc); }
-.stat-label { color: var(--txt2); font-size: 0.85rem; }
-.stat-value { font-weight: 500; font-size: 0.85rem; color: var(--txt); }
-.stat-value.accent { color: var(--green); }
-.stat-value.warn   { color: var(--red); }
+.stat-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed var(--border-acc); }
+.stat-label { color: var(--txt2); font-size: 0.9rem; }
+.stat-value { font-weight: 500; font-size: 0.9rem; color: var(--txt); }
+.stat-value.accent { color: var(--green); font-weight: 700; }
+.stat-value.warn   { color: var(--red); font-weight: 700; }
 
-.stSlider label, .stSelectbox label, .stMultiSelect label { color: var(--txt) !important; font-weight: 500 !important; font-size: 0.9rem !important; }
-h2, h3 { color: var(--txt) !important; }
+.stSlider label, .stSelectbox label, .stMultiSelect label { font-family: 'Google Sans', sans-serif !important; color: var(--txt) !important; font-weight: 500 !important; font-size: 0.95rem !important; }
+h2, h3 { color: var(--txt) !important; font-family: 'Google Sans', sans-serif !important; }
 </style>
 """, unsafe_allow_html=True)
 
 # === Plot defaults ============================================================
 BG   = "#FFFFFF"
 FONT = "#202124"
-GRID = "#E8EAED"
+GRID = "#F1F3F4"
 G = "#1E8E3E"; B = "#1A73E8"; O = "#E65100"; Y = "#F29900"; R = "#D93025"
 
 def layout(title="", h=380):
     return dict(
         plot_bgcolor=BG, paper_bgcolor=BG,
         font=dict(color=FONT, family="Roboto, sans-serif"),
-        title=dict(text=title, font=dict(size=14, color=FONT, family="Google Sans"), x=0),
+        title=dict(text=title, font=dict(size=16, color=FONT, family="Google Sans"), x=0),
         height=h,
-        margin=dict(l=12, r=12, t=40 if title else 18, b=12),
-        legend=dict(bgcolor=BG, bordercolor=GRID, borderwidth=1),
-        xaxis=dict(gridcolor=GRID, zerolinecolor=GRID),
-        yaxis=dict(gridcolor=GRID, zerolinecolor=GRID),
-        hoverlabel=dict(bgcolor="#FFFFFF", font_size=12, font_color="#202124", bordercolor="#DADCE0"),
+        margin=dict(l=12, r=12, t=45 if title else 18, b=12),
+        legend=dict(bgcolor="rgba(255,255,255,0.8)", bordercolor=GRID, borderwidth=1),
+        xaxis=dict(gridcolor=GRID, zerolinecolor=GRID, tickfont=dict(size=11, color="#5F6368")),
+        yaxis=dict(gridcolor=GRID, zerolinecolor=GRID, tickfont=dict(size=11, color="#5F6368")),
+        hoverlabel=dict(bgcolor="#FFFFFF", font_size=13, font_family="Roboto", font_color="#202124", bordercolor="#DADCE0"),
     )
 
 # === Helpers ===================================================================
@@ -236,7 +263,7 @@ def sec(title):
 def div():
     st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
 
-def insight(bullets: list, title="Key Insight"):
+def insight(bullets: list, title="PRACTICAL INSIGHT"):
     items = "".join(f"<li>{b}</li>" for b in bullets)
     st.markdown(f"""
     <div class="insight-box">
@@ -325,27 +352,33 @@ st.markdown("""
 section[data-testid="stSidebar"]  { display: none !important; }
 [data-testid="collapsedControl"]   { display: none !important; }
 .main .block-container {
-    padding-left: 1.5rem !important;
-    padding-right: 1.5rem !important;
-    padding-top: 0.5rem !important;
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+    padding-top: 1rem !important;
 }
 div[data-testid="stHorizontalBlock"] button[kind="primary"] {
     background: #E8F0FE !important;
-    border: none !important;
+    border: 1px solid #1A73E8 !important;
     color: #1967D2 !important;
-    font-weight: 500;
+    font-weight: 700 !important;
+    box-shadow: 0 1px 2px rgba(26, 115, 232, 0.15) !important;
 }
 div[data-testid="stHorizontalBlock"] button[kind="secondary"] {
     background: #FFFFFF !important;
     border: 1px solid #DADCE0 !important;
     color: #5F6368 !important;
-    font-weight: 500;
+    font-weight: 500 !important;
 }
 div[data-testid="stHorizontalBlock"] button {
-    font-family: 'Google Sans', 'Roboto', sans-serif !important;
-    font-size: 0.85rem !important;
-    border-radius: 20px !important;
-    padding: 6px 16px !important;
+    font-family: 'Google Sans', sans-serif !important;
+    font-size: 0.9rem !important;
+    border-radius: 24px !important;
+    padding: 8px 18px !important;
+    transition: all 0.2s ease !important;
+}
+div[data-testid="stHorizontalBlock"] button:hover {
+    background: #F8F9FA !important;
+    box-shadow: var(--shadow-sm) !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -353,13 +386,13 @@ div[data-testid="stHorizontalBlock"] button {
 # Brand bar
 st.markdown("""
 <div style="background:#FFFFFF; border-bottom:1px solid #DADCE0;
-            padding:12px 24px;margin:-0.5rem -1.5rem 1rem -1.5rem;
-            display:flex;align-items:center;box-shadow: 0 1px 2px 0 rgba(60,64,67,0.1);">
-    <span style="font-family:'Google Sans',sans-serif;font-size:1.4rem;font-weight:500;
-                color:#202124;margin-right:24px;">ECOS</span>
-    <span style="font-family:'Roboto',sans-serif;font-size:0.85rem;
+            padding:16px 32px;margin:-1rem -2rem 1.5rem -2rem;
+            display:flex;align-items:center;box-shadow: 0 1px 3px 0 rgba(60,64,67,0.08);">
+    <span style="font-family:'Google Sans',sans-serif;font-size:1.5rem;font-weight:700;
+                color:#1A73E8;margin-right:32px;letter-spacing:0.05em;">ECOS</span>
+    <span style="font-family:'Roboto',sans-serif;font-size:0.9rem;font-weight:500;
                 color:#5F6368;margin-right:auto;">EcoBat Indonesia | IEEEBIG 2026 | Team Elpatron</span>
-    <span style="font-family:'Roboto',sans-serif;font-size:0.8rem;color:#80868B;">
+    <span style="font-family:'Roboto',sans-serif;font-size:0.85rem;color:#80868B;">
         Source: PLN (2024) | Casebook Data (2026)</span>
 </div>
 """, unsafe_allow_html=True)
@@ -386,7 +419,7 @@ for i, (col, (label, _)) in enumerate(zip(nav_cols, PAGES)):
             st.session_state.page_idx = i
             st.rerun()
 
-st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
+st.markdown("<div style='height:12px'></div>", unsafe_allow_html=True)
 page = PAGES[st.session_state.page_idx][1]
 
 # ===============================================================================
@@ -397,14 +430,14 @@ if page == "Overview":
     <div class="page-header">
         <div class="page-tag">Executive Overview | Team Elpatron | IEEEBIG 2026</div>
         <h1>EcoBat Circular<br>Ownership System</h1>
-        <p>Decentralized Reverse Logistics Transformation & Battery-as-a-Service Model for End-of-Life Battery Management in Indonesia</p>
+        <p>Decentralized Reverse Logistics Transformation & Battery-as-a-Service Model for End-of-Life Battery Management in Indonesia.</p>
     </div>""", unsafe_allow_html=True)
 
     kpi([
         ("Rp 7.70 T",   "Net System Benefit",    "5-Year Projection",          "green"),
         ("94,251",       "Units Sold - 2025",      "+800% growth since 2022",    "blue"),
         ("12%",          "Current Return Rate",    "88% leaks to informal market","orange"),
-        ("Rp 26.34 M",  "Material Value/Battery", "Li + Co + Ni recovery",      "yellow"),
+        ("Rp 26.34 M",  "Material Value / Unit", "Li + Co + Ni recovery",      "yellow"),
         ("2030",         "Regulatory Deadline",    "MoEF Regulation No. 9/2024", "red"),
     ])
     div()
@@ -423,14 +456,15 @@ if page == "Overview":
         fig_b = px.bar(df_b, x="Percent", y="Barrier", orientation="h",
                        color="Addressed by", color_discrete_map=cmap, text="Percent")
         fig_b.update_traces(texttemplate="%{text}%", textposition="outside", marker_line_width=0, textfont=dict(color=FONT))
-        fig_b.update_layout(**layout("Consumer Survey Results - n=1,250 (Q4 2025)", 310))
-        fig_b.update_layout(xaxis=dict(range=[0, 88], gridcolor=GRID), showlegend=True)
+        fig_b.update_layout(**layout("Consumer Survey Results (n=1,250 | Q4 2025)", 340))
+        fig_b.update_layout(xaxis=dict(range=[0, 88], gridcolor=GRID), showlegend=True,
+                            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
         st.plotly_chart(fig_b, use_container_width=True)
 
         insight([
-            "Distance (41%) is the single largest structural barrier - not attitude. ECOS Pillar 2 converts existing SPKLU stations into collection points, eliminating the need to build standalone infrastructure.",
+            "Distance (41%) is the single largest structural barrier. ECOS Pillar 2 converts existing SPKLU stations into collection points, eliminating the need to build standalone infrastructure.",
             "37% cite no financial incentive. Pillar 1 deposit scheme is calibrated above secondary market price (Rp 3-4.5M on OLX), flipping the economic calculus in EcoBat's favour.",
-            "68% accept digital/app-based return systems - a strong signal that Pillar 2's QR/RFID traceability will face low adoption friction.",
+            "68% accept digital/app-based return systems, a strong signal that Pillar 2's QR/RFID traceability will face low adoption friction.",
         ])
 
     with col_r:
@@ -439,7 +473,7 @@ if page == "Overview":
             ("01","88% of Batteries Leak to Informal Markets",
              "Of 173,487 cumulative units sold (2022-2025), only ~12% return through official EcoBat channels."),
             ("02","Material Value Lost: Rp 26.34M per Battery",
-             "Batteries resold via OLX forfeit recoverable Lithium, Cobalt, and Nickel worth up to Rp 26.34M each."),
+             "Batteries resold via secondary markets forfeit recoverable Lithium, Cobalt, and Nickel worth up to Rp 26.34M each."),
             ("03","Hard Regulatory Deadline: 2030",
              "PerPres 55/2019, Permenperin 6/2022, and MoEF No. 9/2024 mandate operational recycling infrastructure."),
             ("04","EoL Wave Is Already Visible",
@@ -458,7 +492,7 @@ if page == "Overview":
         (c1,"p1","PILLAR 1","BaaS & Deposit Scheme",
          "Eliminates the ownership gap that allows batteries to leak into informal channels.",
          ["BaaS: EcoBat retains battery ownership throughout lifecycle",
-          "Deposit scheme for 173,487 legacy units - set above OLX resale price",
+          "Deposit scheme for 173,487 legacy units set above resale price",
           "Target final BaaS adoption: 70%"],
          "Rp 5,826.8 B","Net Benefit | 88.4% Margin"),
         (c2,"p2","PILLAR 2","Secondary Energy Hub",
@@ -482,33 +516,33 @@ if page == "Overview":
             <div class="info-card" style="border-top: 4px solid {border_c};">
                 <div class="card-tag {cls}">{tag}</div>
                 <h3>{title}</h3>
-                <p style="margin-bottom:10px;font-size:0.9rem">{desc}</p>
-                <ul style="padding-left:16px;margin:0">{bl}</ul>
-                <div style="font-size:1.45rem;font-weight:500;color:{color};margin-top:14px">{num}</div>
-                <div style="font-size:0.75rem;color:var(--txt3)">{numsub}</div>
+                <p style="margin-bottom:14px;font-size:0.95rem">{desc}</p>
+                <ul style="padding-left:18px;margin:0">{bl}</ul>
+                <div style="font-size:1.6rem;font-family:'Google Sans', sans-serif;font-weight:700;color:{color};margin-top:18px">{num}</div>
+                <div style="font-size:0.8rem;color:var(--txt3);font-weight:500;">{numsub}</div>
             </div>""", unsafe_allow_html=True)
 
     div()
-    sec("HISTORICAL SALES PERFORMANCE")
+    sec("HISTORICAL SALES PERFORMANCE & EoL PROJECTION")
     cc1, cc2 = st.columns(2)
     with cc1:
         fig_s = make_subplots(specs=[[{"secondary_y": True}]])
         fig_s.add_trace(go.Bar(x=years, y=sales_vol, name="Sales Volume (Units)",
                                marker_color=B, marker_line_width=0,
-                               text=sales_vol, textposition="outside", textfont=dict(size=10, color=FONT)),
+                               text=sales_vol, textposition="outside", textfont=dict(size=11, color=FONT)),
                          secondary_y=False)
         fig_s.add_trace(go.Scatter(x=years, y=margin_h, name="Profit Margin (%)",
                                     mode="lines+markers",
-                                    line=dict(color=G, width=2.5), marker=dict(size=8, color=G)),
+                                    line=dict(color=G, width=3, shape="spline"), marker=dict(size=8, color=G)),
                          secondary_y=True)
-        fig_s.update_layout(**layout("Sales Volume & Profit Margin (2022-2025)", 320))
+        fig_s.update_layout(**layout("Sales Volume & Profit Margin (2022-2025)", 340))
         fig_s.update_yaxes(title_text="Units", gridcolor=GRID, secondary_y=False)
         fig_s.update_yaxes(title_text="Margin (%)", secondary_y=True, range=[28, 44])
+        fig_s.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
         st.plotly_chart(fig_s, use_container_width=True)
         insight([
             "Sales surged 812.7% from 10,327 (2022) to 94,250 units (2025) - yet the return infrastructure has not scaled proportionally.",
             "Profit margin improved consistently from 31.2% to 38.9%, confirming EcoBat's pricing power and COGS efficiency.",
-            "The 800%+ growth trajectory means EoL volumes will accelerate sharply from 2027. ECOS must be operational before that wave peaks.",
         ])
 
     with cc2:
@@ -516,17 +550,16 @@ if page == "Overview":
         fig_eol.add_trace(go.Bar(x=eol_yrs, y=eol_sales, name="Projected EoL Volume",
                                   marker_color="#DADCE0", marker_line_color=B,
                                   marker_line_width=1.5,
-                                  text=eol_sales, textposition="outside", textfont=dict(size=9, color=FONT)))
+                                  text=eol_sales, textposition="outside", textfont=dict(size=10, color=FONT)))
         fig_eol.add_trace(go.Bar(x=eol_yrs, y=eol_cap, name="Units Captured by ECOS",
                                   marker_color=O, marker_line_width=0,
-                                  text=eol_cap, textposition="inside", textfont=dict(size=9, color="#FFFFFF")))
-        fig_eol.update_layout(**layout("Projected EoL Volume vs ECOS Capture (2026-2032)", 320))
-        fig_eol.update_layout(barmode="overlay")
+                                  text=eol_cap, textposition="inside", textfont=dict(size=10, color="#FFFFFF")))
+        fig_eol.update_layout(**layout("Projected EoL Volume vs ECOS Capture (2026-2032)", 340))
+        fig_eol.update_layout(barmode="overlay", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
         st.plotly_chart(fig_eol, use_container_width=True)
         insight([
             "Capture rate is low in early years (2026-2028) because the deposit scheme and SPKLU network are still being rolled out.",
             "By 2031-2032, ECOS capture accelerates sharply as the network matures and BaaS batteries begin reaching EoL.",
-            "The gap between EoL volume and captured units represents the market for competitors - closing it fast is EcoBat's primary strategic advantage.",
         ])
 
 # ===============================================================================
@@ -558,13 +591,13 @@ elif page == "Pillar 1":
             ("BaaS Solution",
              "EcoBat sells access to battery usage - not the battery itself. The asset stays on EcoBat's books throughout its lifecycle, guaranteeing retrieval at EoL."),
             ("Implementation Sequence",
-             "Phase 1 starts with fleet operators in logistics & transportation (predictable usage patterns, contract structures already support service models). Retail expansion follows."),
+             "Phase 1 starts with fleet operators in logistics & transportation (predictable usage patterns). Retail expansion follows."),
             ("Global Validation",
              "NIO + CATL (March 2024): after revising their BaaS program, adoption exceeded 70% among NIO buyers. Shi & Hu (2024) formally prove BaaS increases producer profitability while reducing total consumer cost."),
         ], 1):
             st.markdown(f"""
             <div class="step-card">
-                <div class="step-num">{i:02d}</div>
+                <div class="step-num">0{i}</div>
                 <div class="step-content"><h4>{title}</h4><p>{desc}</p></div>
             </div>""", unsafe_allow_html=True)
 
@@ -574,18 +607,18 @@ elif page == "Pillar 1":
         <div class="info-card" style="border-top: 4px solid var(--green)">
             <div class="card-tag p1">173,487 Units Already in Consumer Hands</div>
             <h3>Why the Deposit Works</h3>
-            <p style="margin-bottom:14px">
-                The deposit is set <strong style="color:var(--txt)">above the OLX secondary market price</strong>
+            <p style="margin-bottom:16px">
+                The deposit is set <strong style="color:var(--txt)">above the secondary market price</strong>
                 (Rp 3-4.5M), making formal return the financially rational choice over reselling.
             </p>""", unsafe_allow_html=True)
         for label, val, cls in [
-            ("OLX Secondary Market Price",      "Rp 3-4.5 M",   ""),
+            ("Secondary Market Price",      "Rp 3-4.5 M",   ""),
             ("EcoBat Deposit (calibrated above)","Rp 4.5 M+",   "accent"),
             ("Total Cash Outflow (deposits)",    "Rp 281.0 B",   "warn"),
             ("Retained Sales via Voucher",       "+Rp 655.8 B",  "accent"),
             ("Total Deposit Outflow (net)",      "Rp 936.8 B",   "warn"),
             ("Recovery Rate Target",             "90%",          "accent"),
-            ("Consumer Incentive #1 Preference", "Discount voucher (52%)", ""),
+            ("Consumer Incentive Preference", "Discount voucher (52%)", ""),
         ]:
             stat(label, val, cls)
         st.markdown("</div>", unsafe_allow_html=True)
@@ -601,11 +634,12 @@ elif page == "Pillar 1":
                          secondary_y=False)
         fig_c.add_trace(go.Scatter(x=baas_yrs, y=cum_baas, name="Cumulative BaaS",
                                     mode="lines+markers",
-                                    line=dict(color=Y, width=2.5), marker=dict(size=8, color=Y)),
+                                    line=dict(color=Y, width=3, shape="spline"), marker=dict(size=8, color=Y)),
                          secondary_y=True)
-        fig_c.update_layout(**layout("New vs. Cumulative BaaS Customers", 350))
+        fig_c.update_layout(**layout("New vs. Cumulative BaaS Customers", 360))
         fig_c.update_yaxes(title_text="New Customers / Year", gridcolor=GRID, secondary_y=False)
         fig_c.update_yaxes(title_text="Cumulative Customers", secondary_y=True)
+        fig_c.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
         st.plotly_chart(fig_c, use_container_width=True)
         insight([
             "New customer acquisition grows from 28,275 (2025) to 161,072 (2029) - a 5.7x increase, driven by expanding retail BaaS availability post-2026.",
@@ -617,13 +651,13 @@ elif page == "Pillar 1":
         fig_r.add_trace(go.Bar(x=baas_yrs, y=sub_rev, name="Subscription Revenue (Rp B)",
                                marker_color=G, marker_line_width=0,
                                text=[f"Rp{v:.0f}B" for v in sub_rev],
-                               textposition="outside", textfont=dict(size=9, color=FONT)))
+                               textposition="outside", textfont=dict(size=10, color=FONT)))
         fig_r.add_trace(go.Bar(x=baas_yrs, y=nb_rev, name="Non-Battery EV Revenue (Rp B)",
                                marker_color=B, marker_line_width=0,
                                text=[f"Rp{v:.0f}B" for v in nb_rev],
-                               textposition="outside", textfont=dict(size=9, color=FONT)))
-        fig_r.update_layout(**layout("Subscription vs. Non-Battery EV Revenue", 350))
-        fig_r.update_layout(barmode="group")
+                               textposition="outside", textfont=dict(size=10, color=FONT)))
+        fig_r.update_layout(**layout("Subscription vs. Non-Battery EV Revenue", 360))
+        fig_r.update_layout(barmode="group", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
         st.plotly_chart(fig_r, use_container_width=True)
         insight([
             "Subscription revenue scales from Rp 118.8B (2025) to Rp 1,860.6B (2029) - a 15.7x increase over 5 years.",
@@ -711,7 +745,7 @@ elif page == "Pillar 2":
                     ),
                     text=row["Region"],
                     textposition="top center",
-                    textfont=dict(size=10, color=FONT),
+                    textfont=dict(size=11, color=FONT, family="Roboto"),
                     name=ph, showlegend=False,
                     hovertemplate=(
                         f"<b>{row['Region']}</b><br>"
@@ -727,18 +761,18 @@ elif page == "Pillar 2":
         for ph, clr in c_phase.items():
             if ph in phase_filter:
                 fig_map.add_trace(go.Scattergeo(lon=[None], lat=[None], mode="markers",
-                                                  marker=dict(size=11, color=clr),
+                                                  marker=dict(size=12, color=clr),
                                                   name=f"{ph} Priority", showlegend=True))
         fig_map.update_geos(
             scope="asia", center=dict(lon=118, lat=-2), projection_scale=4.2,
-            showland=True, landcolor="#F8F9FA",
-            showocean=True, oceancolor="#E8EAED",
+            showland=True, landcolor="#F1F3F4",
+            showocean=True, oceancolor="#FFFFFF",
             showcoastlines=True, coastlinecolor="#DADCE0",
             showcountries=True, countrycolor="#DADCE0",
             showframe=False, showlakes=False,
         )
         fig_map.update_layout(
-            paper_bgcolor=BG, geo_bgcolor=BG, height=460,
+            paper_bgcolor=BG, geo_bgcolor=BG, height=480,
             margin=dict(l=0,r=0,t=0,b=0),
             legend=dict(bgcolor=BG, bordercolor=GRID, borderwidth=1,
                         font=dict(color=FONT, size=11), x=0.01, y=0.99)
@@ -754,7 +788,7 @@ elif page == "Pillar 2":
         sec("SPKLU DATA BY REGION (PLN, Dec 2024)")
         disp = df_f[["Region","SPKLU","SPBKLU","Phase","EV_Density"]].copy()
         disp.columns = ["Region","SPKLU","SPBKLU","Phase","EV Density"]
-        st.dataframe(disp, use_container_width=True, hide_index=True, height=210)
+        st.dataframe(disp, use_container_width=True, hide_index=True, height=220)
 
         st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
         sec("CONVERSION LOGIC")
@@ -769,11 +803,11 @@ elif page == "Pillar 2":
              "Survey confirms 68% of consumers are willing to use a digital/app-based return system, validating the tech-enabled collection model."),
         ]:
             st.markdown(f"""
-            <div style="display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--border)">
-                <span style="font-family:'Google Sans', sans-serif; font-size:1.1rem; color:var(--blue); font-weight:500;">{step_num}</span>
+            <div style="display:flex;gap:16px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border-acc)">
+                <span style="font-family:'Google Sans', sans-serif; font-size:1.15rem; color:var(--blue); font-weight:700;">{step_num}</span>
                 <div>
-                    <p style="color:var(--txt);font-weight:500;font-size:0.9rem;margin:0 0 2px">{title}</p>
-                    <p style="color:var(--txt2);font-size:0.85rem;margin:0">{desc}</p>
+                    <p style="color:var(--txt);font-family:'Google Sans', sans-serif;font-weight:500;font-size:0.95rem;margin:0 0 4px">{title}</p>
+                    <p style="color:var(--txt2);font-size:0.9rem;line-height:1.5;margin:0">{desc}</p>
                 </div>
             </div>""", unsafe_allow_html=True)
 
@@ -784,15 +818,16 @@ elif page == "Pillar 2":
         fig_net = make_subplots(specs=[[{"secondary_y": True}]])
         fig_net.add_trace(go.Bar(x=sp_yrs, y=sp_stations, name="Partner Stations",
                                   marker_color=B, marker_line_width=0,
-                                  text=sp_stations, textposition="outside", textfont=dict(size=10, color=FONT)),
+                                  text=sp_stations, textposition="outside", textfont=dict(size=11, color=FONT)),
                            secondary_y=False)
         fig_net.add_trace(go.Scatter(x=sp_yrs, y=sp_cumul, name="Cumul. Units Collected",
                                       mode="lines+markers",
-                                      line=dict(color=G, width=2.5), marker=dict(size=8, color=G)),
+                                      line=dict(color=G, width=3, shape="spline"), marker=dict(size=8, color=G)),
                            secondary_y=True)
-        fig_net.update_layout(**layout("Network Growth & Cumulative Collection", 340))
+        fig_net.update_layout(**layout("Network Growth & Cumulative Collection", 360))
         fig_net.update_yaxes(title_text="Partner Stations", gridcolor=GRID, secondary_y=False)
         fig_net.update_yaxes(title_text="Cumulative Units", secondary_y=True)
+        fig_net.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
         st.plotly_chart(fig_net, use_container_width=True)
         insight([
             "Station count grows 2.5x from 150 (2025) to 368 (2029), achieving >50% national SPKLU coverage.",
@@ -806,16 +841,16 @@ elif page == "Pillar 2":
             y=[500_000, 266_875],
             marker_color=[R, G], marker_line_width=0,
             text=["Rp 500,000", "Rp 266,875"],
-            textposition="outside", textfont=dict(size=12, color=FONT),
+            textposition="outside", textfont=dict(size=12, color=FONT, family="Google Sans"),
             width=0.5,
         ))
         fig_cc.add_annotation(
             x=0.5, y=385_000,
             text="<b>-46.6%</b>",
             showarrow=True, arrowhead=2, arrowcolor=G,
-            ax=0, ay=-40, font=dict(size=16, color=G)
+            ax=0, ay=-40, font=dict(size=16, color=G, family="Google Sans")
         )
-        fig_cc.update_layout(**layout("Cost per Unit Acquired - Channel Comparison", 340))
+        fig_cc.update_layout(**layout("Cost per Unit Acquired - Channel Comparison", 360))
         fig_cc.update_layout(yaxis_range=[0, 680_000], showlegend=False)
         st.plotly_chart(fig_cc, use_container_width=True)
         insight([
@@ -828,8 +863,8 @@ elif page == "Pillar 2":
         vals_op   = [56.2, 28.1, 9.4, 6.3]
         fig_op = px.pie(values=vals_op, names=labels_op,
                          color_discrete_sequence=[B, G, Y, O], hole=0.5)
-        fig_op.update_traces(textposition="outside", textfont_size=11, textfont_color=FONT)
-        fig_op.update_layout(**layout("OPEX Composition - 5-Year (Rp 29.1B)", 340))
+        fig_op.update_traces(textposition="outside", textfont_size=12, textfont_color=FONT)
+        fig_op.update_layout(**layout("OPEX Composition - 5-Year (Rp 29.1B)", 360))
         st.plotly_chart(fig_op, use_container_width=True)
         insight([
             "Operator compensation (56.2%) is the dominant cost - intentionally so, as it aligns SPKLU operators' incentives with EcoBat's collection goals.",
@@ -849,10 +884,10 @@ elif page == "Pillar 2":
                                  marker_color=clr, marker_line_width=0))
     fig_oy.add_trace(go.Scatter(x=sp_yrs, y=sp_opex, name="Total OPEX",
                                  mode="lines+markers",
-                                 line=dict(color="#202124", width=2, dash="dot"),
+                                 line=dict(color="#202124", width=3, shape="spline", dash="dot"),
                                  marker=dict(size=8, color="#202124")))
-    fig_oy.update_layout(**layout("", 320))
-    fig_oy.update_layout(barmode="stack")
+    fig_oy.update_layout(**layout("", 340))
+    fig_oy.update_layout(barmode="stack", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
     st.plotly_chart(fig_oy, use_container_width=True)
     insight([
         "Total OPEX remains stable at ~Rp 5.7-6.2B/year despite the station network more than doubling - demonstrating strong cost efficiency as the network scales.",
@@ -897,14 +932,14 @@ elif page == "Pillar 3":
             st.markdown(f"""
             <div class="grade-card" style="border-top: 4px solid {clr};">
                 <div class="grade-letter" style="color:{clr}">{letter}</div>
-                <h4 style="color:{clr} !important;font-size:1.1rem !important;margin:0 0 4px">{name}</h4>
-                <div style="font-family:'Roboto',sans-serif;font-size:0.8rem;color:var(--txt2);
-                            background:#F1F3F4;padding:4px 10px;border-radius:16px;
-                            display:inline-block;margin-bottom:12px;font-weight:500;">{soh}</div>
-                <p style="font-size:0.9rem !important;text-align:left !important;min-height:80px">{desc}</p>
-                <div style="border-top:1px solid var(--border);padding-top:10px;margin-top:8px">
-                    <div style="font-size:0.8rem;color:var(--txt3)">{rate}</div>
-                    <div style="font-size:1rem;font-weight:500;color:{clr};margin-top:3px">{rev}</div>
+                <h4 style="font-family:'Google Sans', sans-serif; color:{clr} !important;font-size:1.2rem !important;margin:0 0 6px; font-weight:700;">{name}</h4>
+                <div style="font-family:'Roboto',sans-serif;font-size:0.85rem;color:var(--txt2);
+                            background:#F1F3F4;padding:6px 14px;border-radius:20px;
+                            display:inline-block;margin-bottom:16px;font-weight:500;">{soh}</div>
+                <p style="font-size:0.95rem !important;text-align:left !important;min-height:85px;line-height:1.6;">{desc}</p>
+                <div style="border-top:1px dashed var(--border-acc);padding-top:14px;margin-top:12px">
+                    <div style="font-size:0.85rem;color:var(--txt3)">{rate}</div>
+                    <div style="font-size:1.1rem;font-weight:700;color:{clr};margin-top:4px">{rev}</div>
                 </div>
             </div>""", unsafe_allow_html=True)
 
@@ -947,7 +982,7 @@ elif page == "Pillar 3":
             y=[239.7,-42.7,197.0, 2159.4,-194.4,1965.0, -23.0,1901.9],
             text=["Rp 239.7B","Rp 42.7B","Rp 197.0B",
                   "Rp 2,159.4B","Rp 194.4B","Rp 1,965.0B","Rp 23.0B","Rp 1,901.9B"],
-            textposition="outside", textfont=dict(size=9.5, color=FONT),
+            textposition="outside", textfont=dict(size=10, color=FONT),
             connector=dict(line=dict(color=GRID, width=1.5)),
             increasing=dict(marker=dict(color=G)),
             decreasing=dict(marker=dict(color=R)),
@@ -974,11 +1009,11 @@ elif page == "Pillar 3":
     totals_gv = [a+b+c for a,b,c in zip(ga_u,gb_u,gc_u)]
     fig_gv.add_trace(go.Scatter(x=p3_yrs, y=totals_gv, name="Total Units",
                                   mode="lines+markers+text",
-                                  line=dict(color="#202124",width=2),
+                                  line=dict(color="#202124",width=3, shape="spline"),
                                   text=totals_gv, textposition="top center",
                                   textfont=dict(size=11, color=FONT)))
     fig_gv.update_layout(**layout("Battery Grading Volume by SoH Grade", 360))
-    fig_gv.update_layout(barmode="stack")
+    fig_gv.update_layout(barmode="stack", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
     st.plotly_chart(fig_gv, use_container_width=True)
     insight([
         "Total processed units grow from 5,257 (2030) to 35,926 (2033), reflecting BaaS batteries beginning to reach EoL at scale.",
@@ -1009,21 +1044,21 @@ elif page == "Pillar 3":
             desc = "SoH below automotive EoL threshold. Routed to material extraction for Li/Co/Ni recovery."
 
         st.markdown(f"""
-        <div style="background:var(--bg-card);border:2px solid {clr};border-radius:12px;
-                    padding:26px;text-align:center;box-shadow:var(--shadow);">
-            <div style="font-family:'Roboto',sans-serif;font-size:0.8rem;color:var(--txt3);
-                        letter-spacing:0.05em;text-transform:uppercase;margin-bottom:10px">
+        <div style="background:var(--bg-card);border:2px solid {clr};border-radius:16px;
+                    padding:32px 24px;text-align:center;box-shadow:var(--shadow-md); transition: all 0.3s ease;">
+            <div style="font-family:'Roboto',sans-serif;font-size:0.85rem;color:var(--txt3);
+                        letter-spacing:0.05em;text-transform:uppercase;margin-bottom:12px; font-weight:500;">
                 {brand} | SoH {soh_v}% | {cycles} cycles
             </div>
-            <div style="font-family:'Google Sans',sans-serif;font-size:4.5rem;
-                        color:{clr};line-height:1;margin-bottom:6px">GRADE {grade}</div>
-            <div style="font-size:1.1rem;font-weight:500;color:{clr};margin-bottom:8px">{path}</div>
-            <div style="font-size:0.9rem;color:var(--txt2);margin-bottom:18px">{desc}</div>
-            <div style="background:#F8F9FA;border-radius:8px;padding:12px;border:1px solid #DADCE0;">
-                <div style="font-size:0.75rem;color:var(--txt3);margin-bottom:3px;
-                             font-family:'Roboto',sans-serif;text-transform:uppercase;letter-spacing:0.05em">
+            <div style="font-family:'Google Sans',sans-serif;font-size:5rem;
+                        color:{clr};line-height:1;margin-bottom:8px;font-weight:700;">GRADE {grade}</div>
+            <div style="font-size:1.25rem;font-weight:500;color:{clr};margin-bottom:12px">{path}</div>
+            <div style="font-size:0.95rem;color:var(--txt2);margin-bottom:24px;line-height:1.6;">{desc}</div>
+            <div style="background:#F8F9FA;border-radius:12px;padding:16px;border:1px solid #DADCE0;">
+                <div style="font-size:0.8rem;color:var(--txt3);margin-bottom:6px;
+                             font-family:'Roboto',sans-serif;text-transform:uppercase;letter-spacing:0.05em; font-weight:500;">
                     Estimated Value</div>
-                <div style="font-size:1.5rem;font-weight:500;color:{Y}">
+                <div style="font-family:'Google Sans', sans-serif;font-size:1.8rem;font-weight:500;color:{Y}">
                     ~Rp {val_est:.2f} Million / unit
                 </div>
             </div>
@@ -1066,7 +1101,7 @@ elif page == "Financial":
                                      text=[f"Rp {v:,.1f}B" for v in vals],
                                      textposition="outside", textfont=dict(size=10, color=FONT)))
         fig_pp.update_layout(**layout("", 400))
-        fig_pp.update_layout(barmode="group")
+        fig_pp.update_layout(barmode="group", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
         st.plotly_chart(fig_pp, use_container_width=True)
         insight([
             "Pillar 1 dominates, contributing 75.7% (Rp 5,826.8B) of total net benefit - BaaS subscription is the primary recurring revenue engine.",
@@ -1083,7 +1118,7 @@ elif page == "Financial":
         fig_pie.update_layout(**layout("", 270))
         fig_pie.update_layout(annotations=[dict(
             text="<b>Rp 7.70 T</b>", x=0.5, y=0.5,
-            font_size=15, font_color=FONT, showarrow=False
+            font_size=16, font_color=FONT, showarrow=False, font_family="Google Sans"
         )])
         st.plotly_chart(fig_pie, use_container_width=True)
 
@@ -1116,11 +1151,11 @@ elif page == "Financial":
     for col, (frm, arr, to, desc) in zip(cols_f, flows):
         with col:
             st.markdown(f"""
-            <div class="info-card" style="text-align:center;padding:14px">
-                <div style="font-size:0.8rem;font-weight:500;color:var(--txt)">{frm}</div>
-                <div style="font-size:1.4rem;color:var(--blue);margin:5px 0">{arr}</div>
-                <div style="font-size:0.8rem;font-weight:500;color:var(--txt);margin-bottom:7px">{to}</div>
-                <div style="font-size:0.75rem;color:var(--txt2)">{desc}</div>
+            <div class="info-card" style="text-align:center;padding:20px 16px;">
+                <div style="font-size:0.85rem;font-weight:700;color:var(--txt)">{frm}</div>
+                <div style="font-size:1.6rem;color:var(--blue);margin:8px 0;font-weight:700;">{arr}</div>
+                <div style="font-size:0.85rem;font-weight:700;color:var(--txt);margin-bottom:10px">{to}</div>
+                <div style="font-size:0.8rem;color:var(--txt2);line-height:1.4;">{desc}</div>
             </div>""", unsafe_allow_html=True)
 
     div()
@@ -1129,12 +1164,12 @@ elif page == "Financial":
     fig_e2.add_trace(go.Bar(x=eol_yrs, y=eol_sales, name="Projected EoL Volume",
                              marker_color="#DADCE0", marker_line_color=B,
                              marker_line_width=1.5,
-                             text=eol_sales, textposition="outside", textfont=dict(size=9, color=FONT)))
+                             text=eol_sales, textposition="outside", textfont=dict(size=10, color=FONT)))
     fig_e2.add_trace(go.Bar(x=eol_yrs, y=eol_cap, name="Captured by ECOS",
                              marker_color=G, marker_line_width=0,
-                             text=eol_cap, textposition="inside", textfont=dict(size=9, color="#FFFFFF")))
-    fig_e2.update_layout(**layout("", 340))
-    fig_e2.update_layout(barmode="overlay")
+                             text=eol_cap, textposition="inside", textfont=dict(size=10, color="#FFFFFF")))
+    fig_e2.update_layout(**layout("", 360))
+    fig_e2.update_layout(barmode="overlay", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
     st.plotly_chart(fig_e2, use_container_width=True)
     insight([
         "ECOS capture accelerates sharply in 2031-2032 as the network matures and BaaS units begin reaching EoL - the system is designed to be ready before peak volumes arrive.",
@@ -1167,7 +1202,7 @@ elif page == "Risk":
             <div class="kpi-card" style="border-color:{clr};background:{bg}">
                 <div class="kpi-label" style="color:{clr}">{lvl} Risk</div>
                 <div class="kpi-value" style="color:{clr}">{n}</div>
-                <div class="kpi-sub" style="color:{clr}">of 12 identified risks</div>
+                <div class="kpi-sub" style="color:{clr};font-weight:500;">of 12 identified risks</div>
             </div>""", unsafe_allow_html=True)
 
     div()
@@ -1183,9 +1218,9 @@ elif page == "Risk":
             size_max=48,
         )
         fig_sc.update_traces(textposition="top center",
-                              textfont=dict(size=11, color=FONT, family="Roboto"))
-        fig_sc.add_hline(y=3, line_dash="dot", line_color=GRID, line_width=1.5)
-        fig_sc.add_vline(x=3, line_dash="dot", line_color=GRID, line_width=1.5)
+                              textfont=dict(size=12, color=FONT, family="Google Sans", weight="bold"))
+        fig_sc.add_hline(y=3, line_dash="dot", line_color=GRID, line_width=2)
+        fig_sc.add_vline(x=3, line_dash="dot", line_color=GRID, line_width=2)
         for x, y, txt in [
             (1.5, 4.5,"HIGH LIKELIHOOD\nLOW SEVERITY"),
             (4.2, 4.5,"CRITICAL ZONE"),
@@ -1193,13 +1228,13 @@ elif page == "Risk":
             (4.2, 1.5,"HIGH SEVERITY\nLOW LIKELIHOOD"),
         ]:
             fig_sc.add_annotation(x=x, y=y, text=txt,
-                                   font=dict(size=9, color="#5F6368"),
+                                   font=dict(size=10, color="#5F6368", family="Roboto", weight="bold"),
                                    showarrow=False)
-        fig_sc.update_layout(**layout("", 440))
+        fig_sc.update_layout(**layout("", 460))
         fig_sc.update_layout(
             xaxis=dict(title="Severity (1-5)", range=[0.3,5.7], gridcolor=GRID),
             yaxis=dict(title="Likelihood (1-5)", range=[0.3,5.7], gridcolor=GRID),
-            legend=dict(bgcolor=BG, title_text="Level"),
+            legend=dict(bgcolor=BG, title_text="Level", orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         )
         st.plotly_chart(fig_sc, use_container_width=True)
         insight([
@@ -1220,14 +1255,14 @@ elif page == "Risk":
             clr = sc_clr[r["level"]]
             st.markdown(f"""
             <div class="risk-row">
-                <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
                     <span class="badge {r['level'].lower()}">{r['level']}</span>
-                    <span style="font-family:'Roboto',sans-serif;font-size:0.75rem;color:var(--txt3)">
+                    <span style="font-family:'Roboto',sans-serif;font-size:0.8rem;color:var(--txt3); font-weight:500;">
                         {r['id']} | {r['pillar']} | L{r['L']} x S{r['S']} = {r['Score']}
                     </span>
                 </div>
                 <div class="risk-name">{r['name']}</div>
-                <div class="risk-mit">{r['mitigation']}</div>
+                <div class="risk-mit"><strong style="color:var(--txt)">Mitigation:</strong> {r['mitigation']}</div>
             </div>""", unsafe_allow_html=True)
 
 # ===============================================================================
@@ -1257,8 +1292,8 @@ elif page == "Simulator":
         co_p    = st.slider("Cobalt Price (Rp Million/kg)",  1.5, 5.0, 2.8, 0.1)
         st.markdown("</div>", unsafe_allow_html=True)
         st.markdown("""
-        <div class="c-alert" style="margin-top:10px">
-            <b>Tip:</b> Try dropping BaaS Adoption to 40% to see the cascading revenue impact.
+        <div class="c-alert" style="margin-top:16px">
+            <b>TIP:</b> Try dropping BaaS Adoption to 40% to see the cascading revenue impact.
             Cobalt price has the highest per-unit sensitivity of all material inputs.
         </div>""", unsafe_allow_html=True)
 
@@ -1306,7 +1341,7 @@ elif page == "Simulator":
                                       text=[f"Rp {abs(val):,.1f}B"],
                                       textposition="outside", textfont=dict(size=10, color=FONT),
                                       showlegend=False))
-        fig_sim.update_layout(**layout("Scenario Revenue Breakdown (Rp Billion)", 310))
+        fig_sim.update_layout(**layout("Scenario Revenue Breakdown (Rp Billion)", 320))
         st.plotly_chart(fig_sim, use_container_width=True)
 
         c_g1, c_g2 = st.columns(2)
@@ -1315,7 +1350,8 @@ elif page == "Simulator":
                              names=[f"Grade A ({ga:,})", f"Grade B ({gb:,})", f"Grade C ({gc:,})"],
                              color_discrete_sequence=[G, B, O], hole=0.5)
             fig_gp.update_traces(textfont_color="#FFFFFF")
-            fig_gp.update_layout(**layout("Grade Distribution", 240))
+            fig_gp.update_layout(**layout("Grade Distribution", 260))
+            fig_gp.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
             st.plotly_chart(fig_gp, use_container_width=True)
 
         with c_g2:
@@ -1326,20 +1362,20 @@ elif page == "Simulator":
                                          text=[f"Rp {val:,.1f}B"],
                                          textposition="outside", textfont=dict(size=11, color=FONT),
                                          showlegend=False, marker_line_width=0))
-            fig_vs.update_layout(**layout("vs. Baseline", 240))
+            fig_vs.update_layout(**layout("vs. Baseline", 260))
             fig_vs.update_layout(yaxis_range=[0, max(net_b, 7699.6)*1.28])
             st.plotly_chart(fig_vs, use_container_width=True)
 
         st.markdown(f"""
         <div style="background:{'#E6F4EA' if delta>=0 else '#FCE8E6'};
                     border:1px solid {'#CEEAD6' if delta>=0 else '#FAD2CF'};
-                    border-radius:8px;padding:16px;margin-top:8px">
-            <span style="font-family:'Roboto',sans-serif;font-size:0.8rem;color:var(--txt2);
-                          text-transform:uppercase;letter-spacing:0.05em;font-weight:500">Delta vs Baseline</span>
-            <div style="font-size:1.5rem;font-weight:500;color:{delta_clr};margin-top:4px">
+                    border-radius:12px;padding:20px 24px;margin-top:12px; box-shadow: var(--shadow-sm);">
+            <span style="font-family:'Google Sans',sans-serif;font-size:0.85rem;color:var(--txt2);
+                          text-transform:uppercase;letter-spacing:0.08em;font-weight:700">Delta vs Baseline</span>
+            <div style="font-family:'Google Sans',sans-serif;font-size:1.8rem;font-weight:500;color:{delta_clr};margin-top:6px; margin-bottom:8px;">
                 {delta_sign}Rp {abs(delta):,.1f} B &nbsp;|&nbsp; {delta_sign}{delta_pct:.1f}%
             </div>
-            <div style="font-size:0.9rem;color:var(--txt2);margin-top:4px">
+            <div style="font-size:0.95rem;color:var(--txt2);font-weight:500;">
                 Net Margin: {margin:.1f}% &nbsp;|&nbsp;
                 Material Value/unit: Rp {mat_per:.2f}M &nbsp;|&nbsp;
                 Total Batteries: {total_b:,} units
