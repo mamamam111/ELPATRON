@@ -352,7 +352,7 @@ st.markdown("""
     <span style="font-family:'Google Sans',sans-serif;font-size:1.4rem;font-weight:500;
                 color:#202124;margin-right:24px;">⚡ ECOS</span>
     <span style="font-family:'Roboto',sans-serif;font-size:0.85rem;
-                color:#5F6368;margin-right:auto;">EcoBat Indonesia | IEEEBIG 2026 | Team Elpatron</span>
+                color:#5F6368;margin-right:auto;">Team Elpatron</span>
 </div>
 """, unsafe_allow_html=True)
 
