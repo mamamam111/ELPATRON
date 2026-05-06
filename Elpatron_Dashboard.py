@@ -373,9 +373,6 @@ PAGES = [
     ("💰 Financial",  "Financial"),
     ("⚠️ Risk",        "Risk"),
     ("🎛️ Simulator",  "Simulator"),
-    ("📍 ROI by City", "ROI"),
-    ("🤖 Ask ECOS AI", "AI"),
-    ("📄 Export PDF",  "PDF"),
 ]
 
 if "page_idx" not in st.session_state:
