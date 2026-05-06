@@ -7,8 +7,7 @@ import numpy as np
 
 # === Page Config ===============================================================
 st.set_page_config(
-    page_title="ECOS | EcoBat Indonesia",
-    page_icon="ECOS",
+    page_title="ECOS Dashboard",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -325,7 +324,7 @@ risks = [
     {"id":"R3","name":"Regulatory non-compliance by 2030 deadline","L":3,"S":5,"level":"Extreme","pillar":"All",
      "mitigation":"ECOS architecture maps directly to PerPres 55/2019 and Permenperin 6/2022 requirements."},
     {"id":"R4","name":"SPKLU partnership adoption failure","L":3,"S":4,"level":"Extreme","pillar":"Pillar 2",
-     "mitigation":"EcoBat absorbs infrastructure cost; operator compensation tied to actual collection volume."},
+     "mitigation":"Company absorbs infrastructure cost; operator compensation tied to actual collection volume."},
     {"id":"R5","name":"Java-outside geographic coverage gap","L":3,"S":3,"level":"High","pillar":"Pillar 2",
      "mitigation":"Phased rollout prioritises Java first; BaaS logistics fleet compensates in low-density zones."},
     {"id":"R6","name":"Safety incident from non-standard battery modification","L":2,"S":5,"level":"Extreme","pillar":"Pillar 1",
@@ -389,11 +388,7 @@ st.markdown("""
             padding:16px 32px;margin:-1rem -2rem 1.5rem -2rem;
             display:flex;align-items:center;box-shadow: 0 1px 3px 0 rgba(60,64,67,0.08);">
     <span style="font-family:'Google Sans',sans-serif;font-size:1.5rem;font-weight:700;
-                color:#1A73E8;margin-right:32px;letter-spacing:0.05em;">ECOS</span>
-    <span style="font-family:'Roboto',sans-serif;font-size:0.9rem;font-weight:500;
-                color:#5F6368;margin-right:auto;">EcoBat Indonesia | IEEEBIG 2026 | Team Elpatron</span>
-    <span style="font-family:'Roboto',sans-serif;font-size:0.85rem;color:#80868B;">
-        Source: PLN (2024) | Casebook Data (2026)</span>
+                color:#1A73E8;letter-spacing:0.05em;">ECOS DASHBOARD</span>
 </div>
 """, unsafe_allow_html=True)
 
@@ -428,8 +423,8 @@ page = PAGES[st.session_state.page_idx][1]
 if page == "Overview":
     st.markdown("""
     <div class="page-header">
-        <div class="page-tag">Executive Overview | Team Elpatron | IEEEBIG 2026</div>
-        <h1>EcoBat Circular<br>Ownership System</h1>
+        <div class="page-tag">Executive Overview</div>
+        <h1>ECOS Circular<br>Ownership System</h1>
         <p>Decentralized Reverse Logistics Transformation & Battery-as-a-Service Model for End-of-Life Battery Management in Indonesia.</p>
     </div>""", unsafe_allow_html=True)
 
@@ -463,7 +458,7 @@ if page == "Overview":
 
         insight([
             "Distance (41%) is the single largest structural barrier. ECOS Pillar 2 converts existing SPKLU stations into collection points, eliminating the need to build standalone infrastructure.",
-            "37% cite no financial incentive. Pillar 1 deposit scheme is calibrated above secondary market price (Rp 3-4.5M on OLX), flipping the economic calculus in EcoBat's favour.",
+            "37% cite no financial incentive. Pillar 1 deposit scheme is calibrated above secondary market price (Rp 3-4.5M on OLX), flipping the economic calculus in the system's favour.",
             "68% accept digital/app-based return systems, a strong signal that Pillar 2's QR/RFID traceability will face low adoption friction.",
         ])
 
@@ -471,7 +466,7 @@ if page == "Overview":
         sec("CRITICAL SITUATION")
         for step_num, title, desc in [
             ("01","88% of Batteries Leak to Informal Markets",
-             "Of 173,487 cumulative units sold (2022-2025), only ~12% return through official EcoBat channels."),
+             "Of 173,487 cumulative units sold (2022-2025), only ~12% return through official channels."),
             ("02","Material Value Lost: Rp 26.34M per Battery",
              "Batteries resold via secondary markets forfeit recoverable Lithium, Cobalt, and Nickel worth up to Rp 26.34M each."),
             ("03","Hard Regulatory Deadline: 2030",
@@ -491,7 +486,7 @@ if page == "Overview":
     for col, cls, tag, title, desc, bullets, num, numsub in [
         (c1,"p1","PILLAR 1","BaaS & Deposit Scheme",
          "Eliminates the ownership gap that allows batteries to leak into informal channels.",
-         ["BaaS: EcoBat retains battery ownership throughout lifecycle",
+         ["BaaS: Company retains battery ownership throughout lifecycle",
           "Deposit scheme for 173,487 legacy units set above resale price",
           "Target final BaaS adoption: 70%"],
          "Rp 5,826.8 B","Net Benefit | 88.4% Margin"),
@@ -542,7 +537,7 @@ if page == "Overview":
         st.plotly_chart(fig_s, use_container_width=True)
         insight([
             "Sales surged 812.7% from 10,327 (2022) to 94,250 units (2025) - yet the return infrastructure has not scaled proportionally.",
-            "Profit margin improved consistently from 31.2% to 38.9%, confirming EcoBat's pricing power and COGS efficiency.",
+            "Profit margin improved consistently from 31.2% to 38.9%, confirming the pricing power and COGS efficiency.",
         ])
 
     with cc2:
@@ -553,7 +548,7 @@ if page == "Overview":
                                   text=eol_sales, textposition="outside", textfont=dict(size=10, color=FONT)))
         fig_eol.add_trace(go.Bar(x=eol_yrs, y=eol_cap, name="Units Captured by ECOS",
                                   marker_color=O, marker_line_width=0,
-                                  text=eol_cap, textposition="inside", textfont=dict(size=10, color="#FFFFFF")))
+                                  text=eol_cap, textposition="inside", textfont=dict(size=10, color=FONT)))
         fig_eol.update_layout(**layout("Projected EoL Volume vs ECOS Capture (2026-2032)", 340))
         fig_eol.update_layout(barmode="overlay", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
         st.plotly_chart(fig_eol, use_container_width=True)
@@ -587,9 +582,9 @@ elif page == "Pillar 1":
         sec("BATTERY-AS-A-SERVICE - HOW IT WORKS")
         for i, (title, desc) in enumerate([
             ("Root Cause",
-             "Once a battery is sold, EcoBat loses all legal and economic leverage to recover it. This is an incentive design failure, not a consumer awareness problem."),
+             "Once a battery is sold, the company loses all legal and economic leverage to recover it. This is an incentive design failure, not a consumer awareness problem."),
             ("BaaS Solution",
-             "EcoBat sells access to battery usage - not the battery itself. The asset stays on EcoBat's books throughout its lifecycle, guaranteeing retrieval at EoL."),
+             "The system sells access to battery usage - not the battery itself. The asset stays on the company's books throughout its lifecycle, guaranteeing retrieval at EoL."),
             ("Implementation Sequence",
              "Phase 1 starts with fleet operators in logistics & transportation (predictable usage patterns). Retail expansion follows."),
             ("Global Validation",
@@ -613,7 +608,7 @@ elif page == "Pillar 1":
             </p>""", unsafe_allow_html=True)
         for label, val, cls in [
             ("Secondary Market Price",      "Rp 3-4.5 M",   ""),
-            ("EcoBat Deposit (calibrated above)","Rp 4.5 M+",   "accent"),
+            ("System Deposit (calibrated above)","Rp 4.5 M+",   "accent"),
             ("Total Cash Outflow (deposits)",    "Rp 281.0 B",   "warn"),
             ("Retained Sales via Voucher",       "+Rp 655.8 B",  "accent"),
             ("Total Deposit Outflow (net)",      "Rp 936.8 B",   "warn"),
@@ -719,7 +714,7 @@ elif page == "Pillar 2":
     ])
     div()
 
-    sec("SPKLU INFRASTRUCTURE MAP - INDONESIA (Source: PLN, Dec 2024)")
+    sec("SPKLU INFRASTRUCTURE MAP - INDONESIA")
     col_map, col_inf = st.columns([1.6, 1])
     with col_map:
         phase_filter = st.multiselect(
@@ -741,7 +736,7 @@ elif page == "Pillar 2":
                     marker=dict(
                         size=s_density[row["EV_Density"]],
                         color=c_phase[ph], opacity=0.82,
-                        line=dict(width=2, color="#FFFFFF"), symbol="circle"
+                        line=dict(width=2, color=BG), symbol="circle"
                     ),
                     text=row["Region"],
                     textposition="top center",
@@ -785,7 +780,7 @@ elif page == "Pillar 2":
         ])
 
     with col_inf:
-        sec("SPKLU DATA BY REGION (PLN, Dec 2024)")
+        sec("SPKLU DATA BY REGION")
         disp = df_f[["Region","SPKLU","SPBKLU","Phase","EV_Density"]].copy()
         disp.columns = ["Region","SPKLU","SPBKLU","Phase","EV Density"]
         st.dataframe(disp, use_container_width=True, hide_index=True, height=220)
@@ -867,7 +862,7 @@ elif page == "Pillar 2":
         fig_op.update_layout(**layout("OPEX Composition - 5-Year (Rp 29.1B)", 360))
         st.plotly_chart(fig_op, use_container_width=True)
         insight([
-            "Operator compensation (56.2%) is the dominant cost - intentionally so, as it aligns SPKLU operators' incentives with EcoBat's collection goals.",
+            "Operator compensation (56.2%) is the dominant cost - intentionally so, as it aligns SPKLU operators' incentives with the system's collection goals.",
             "Tech traceability (QR/RFID) is only 9.4% of OPEX, making the digital tracking layer highly cost-effective.",
         ])
 
@@ -1167,7 +1162,7 @@ elif page == "Financial":
                              text=eol_sales, textposition="outside", textfont=dict(size=10, color=FONT)))
     fig_e2.add_trace(go.Bar(x=eol_yrs, y=eol_cap, name="Captured by ECOS",
                              marker_color=G, marker_line_width=0,
-                             text=eol_cap, textposition="inside", textfont=dict(size=10, color="#FFFFFF")))
+                             text=eol_cap, textposition="inside", textfont=dict(size=10, color=FONT)))
     fig_e2.update_layout(**layout("", 360))
     fig_e2.update_layout(barmode="overlay", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
     st.plotly_chart(fig_e2, use_container_width=True)
@@ -1285,7 +1280,7 @@ elif page == "Simulator":
         dep_r   = st.slider("Deposit Recovery Rate (%)", 40, 100, 90,
                              help="% of 173,487 legacy units successfully returned")
         sp_cov  = st.slider("SPKLU Network Coverage (%)", 15, 80, 50,
-                             help="% of national SPKLU infrastructure partnered with EcoBat")
+                             help="% of national SPKLU infrastructure partnered with the network")
         ga_pct  = st.slider("Grade A Battery Ratio (%)", 15, 55, 35,
                              help="% of collected batteries grading as SoH >75%")
         li_p    = st.slider("Lithium Price (Rp Million/kg)", 0.8, 2.5, 1.2, 0.05)
@@ -1349,7 +1344,7 @@ elif page == "Simulator":
             fig_gp = px.pie(values=[ga, gb, gc],
                              names=[f"Grade A ({ga:,})", f"Grade B ({gb:,})", f"Grade C ({gc:,})"],
                              color_discrete_sequence=[G, B, O], hole=0.5)
-            fig_gp.update_traces(textfont_color="#FFFFFF")
+            fig_gp.update_traces(textfont_color=FONT)
             fig_gp.update_layout(**layout("Grade Distribution", 260))
             fig_gp.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
             st.plotly_chart(fig_gp, use_container_width=True)
